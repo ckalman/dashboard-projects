@@ -19,3 +19,14 @@ body {
   border-width: 1px 0;
   background: #666;
 }
+
+.container {
+  width: 85% !important;
+}
+.remove-border {
+  border-top: 0px !important;
+}
+.projects-filters{
+  display: inline-flex;
+  width: 100%;
+}
