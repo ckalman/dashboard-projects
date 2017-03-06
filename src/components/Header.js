@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Nav, Navbar, NavItem, Header, Brand, FormControl, FormGroup } from 'react-bootstrap';
+import { Nav, Navbar, NavItem, Header, Brand, FormControl, FormGroup, Button } from 'react-bootstrap';
 import UserActions from '../actions/UserActions';
 
 class HeaderComponent extends Component {
@@ -49,9 +49,27 @@ class HeaderComponent extends Component {
           <Navbar.Brand>
             <a href="/">Projects dashboard</a>
           </Navbar.Brand>
+          <Navbar.Toggle />
         </Navbar.Header>
         <Nav>
         </Nav>
+        <Navbar.Collapse>
+          <Navbar.Form pullLeft>
+            <Nav>
+              <NavItem eventKey={1} href="#">Home</NavItem>
+            </Nav>
+          </Navbar.Form>
+          <Navbar.Form pullRight>
+            {!this.state.authenticated ? (
+                <div>
+                  <FormControl type="text" placeholder="Username..." onChange={this.changeUsername} />
+                  <FormControl type="text" placeholder="Password..." onChange={this.changePassword} />
+                  <Button onClick={this.login}>Login</Button></div>
+              ) :
+              <Button onClick={this.logout}>Logout</Button>
+            }
+          </Navbar.Form>
+        </Navbar.Collapse>
       </Navbar>
     );
   }
