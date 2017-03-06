@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ProjectStore from '../../stores/ProjectStore';
 import ProjectActions from '../../actions/ProjectActions';
+import moment from 'moment'
 import { Panel, Col, Table, FormControl, Button } from 'react-bootstrap';
 
 class ProjectsComponent extends Component {
@@ -8,9 +9,13 @@ class ProjectsComponent extends Component {
     constructor() {
         super();
         this.state = {
-            projects: []
+            projects: [],
+            search: '',
+            filterType: 'title'
         }
         this.onChange = this.onChange.bind(this);
+        this.handleFilterUserInputChange = this.handleFilterUserInputChange.bind(this);
+        this.handleFilterComboBoxChange = this.handleFilterComboBoxChange.bind(this);
         ProjectActions.all();
     }
 
@@ -28,18 +33,35 @@ class ProjectsComponent extends Component {
         });
     }
 
+    handleFilterUserInputChange(e) {
+        this.setState({ search: e.target.value });
+    }
+
+    handleFilterComboBoxChange(e){
+        this.setState({ filterType: e.target.value });
+    }
+
+    handleClickSearch() {
+        if(this.state.filterType != ''){
+            ProjectActions.search(this.state.filterType, this.state.search);
+        }else{
+            ProjectActions.all();
+        }
+    }
+
     render() {
         return (
             <div>
                 <Panel header="Projects">
                     <div className="projects-filters">
                         <span>Filters</span>
-                        <FormControl type="text" placeholder="Search" />
-                        <FormControl componentClass="select" placeholder="select">
-                            <option value="select">select</option>
-                            <option value="other">...</option>
+                        <FormControl type="text" placeholder="Search" onChange={this.handleFilterUserInputChange} />
+                        <FormControl componentClass="select" placeholder="select" onChange={this.handleFilterComboBoxChange}>
+                            <option value="title">title</option>
+                            <option value="description">description</option>
+                            <option value="tags">tags</option>
                         </FormControl>
-                        <Button type="submit">
+                        <Button onClick={() => this.handleClickSearch()}>
                             Search
                         </Button>
                     </div>
@@ -59,7 +81,7 @@ class ProjectsComponent extends Component {
                                     <tr key={index}>
                                         <td>{project.title}</td>
                                         <td>{project.projectManager.firstname} {project.projectManager.lastname}</td>
-                                        <td>{project.deadline}</td>
+                                        <td>{moment(project.deadline).format('DD-MM-YYYY')}</td>
                                         <td>{project.status}</td>
                                     </tr>
                                 );

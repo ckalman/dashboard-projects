@@ -51,26 +51,6 @@ class HeaderComponent extends Component {
           </Navbar.Brand>
         </Navbar.Header>
         <Nav>
-          {!this.state.authenticated ? (
-            <FormGroup
-              controlId="formLogin"
-            >
-              <FormControl
-                type="text"
-                placeholder="Username..."
-                onChange={this.changeUsername}
-              />
-              <FormControl
-                type="password"
-                placeholder="Password..."
-                onChange={this.changePassword}
-              />
-
-              <NavItem onClick={this.login}>Login</NavItem>
-            </FormGroup>
-            ) :
-            <NavItem onClick={this.logout}>Logout</NavItem>
-          }
         </Nav>
       </Navbar>
     );

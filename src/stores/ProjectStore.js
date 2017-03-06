@@ -49,11 +49,19 @@ ProjectStore.dispatchToken = AppDispatcher.register(action => {
         case ProjectConstants.PROJECT_ALL:
             setProjects(action.projects);
             ProjectStore.emitChange();
-            break
+            break;
         case ProjectConstants.PROJECT_ERROR:
             alert(action.message);
             ProjectStore.emitChange();
-            break
+            break;
+        case ProjectConstants.PROJECT_SEARCH:
+            setProjects(action.projects);
+            ProjectStore.emitChange();
+            break;
+        case ProjectConstants.PROJECT_SEARCH_ERROR:
+            alert(action.message);
+            ProjectStore.emitChange();
+            break;
         default:
     }
 
