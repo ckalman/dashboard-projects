@@ -47,7 +47,7 @@ const ProjectStore = new ProjectStoreClass();
 ProjectStore.dispatchToken = AppDispatcher.register(action => {
     switch (action.actionType) {
         case ProjectConstants.PROJECT_ALL:
-            setFile(action.file);
+            setProjects(action.projects);
             ProjectStore.emitChange();
             break
         case ProjectConstants.PROJECT_ERROR:
