@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Nav, Navbar, NavItem, Header, Brand } from 'react-bootstrap';
+import { Nav, Navbar, NavItem, Header, Brand, FormControl, FormGroup } from 'react-bootstrap';
+import UserActions from '../actions/UserActions';
 
 class HeaderComponent extends Component {
   static contextTypes = {
@@ -9,14 +10,31 @@ class HeaderComponent extends Component {
   constructor() {
     super();
     this.state = {
-      authenticated: false
+      authenticated: false,
+      username: '',
+      password: ''
     }
+
+    this.login = this.login.bind(this);
+    this.logout = this.logout.bind(this);
+    this.changeUsername = this.changeUsername.bind(this);
+    this.changePassword = this.changePassword.bind(this);
+  }
+
+  changeUsername(e){
+    this.setState({ username: e.target.value });
+  }
+
+  changePassword(e){
+    this.setState({ password: e.target.value });
   }
 
   componentWillMount() {
   }
 
   login() {
+    UserActions.auth(this.state.username, this.state.password);
+    if (localStorage.getItem('token') != '') this.setState({authenticated: true});
   }
 
   logout() {
@@ -34,10 +52,25 @@ class HeaderComponent extends Component {
         </Navbar.Header>
         <Nav>
           {!this.state.authenticated ? (
-            <NavItem onClick={this.login}>Login</NavItem>
-          ) : (
-              <NavItem onClick={this.logout}>Logout</NavItem>
-            )}
+            <FormGroup
+              controlId="formLogin"
+            >
+              <FormControl
+                type="text"
+                placeholder="Username..."
+                onChange={this.changeUsername}
+              />
+              <FormControl
+                type="password"
+                placeholder="Password..."
+                onChange={this.changePassword}
+              />
+
+              <NavItem onClick={this.login}>Login</NavItem>
+            </FormGroup>
+            ) :
+            <NavItem onClick={this.logout}>Logout</NavItem>
+          }
         </Nav>
       </Navbar>
     );
