@@ -1,20 +1,25 @@
 import React, { Component } from 'react';
-import { Nav, Navbar, NavItem, Header, Brand, FormControl, FormGroup, Button } from 'react-bootstrap';
-import UserActions from '../actions/UserActions';
+import { Nav, Navbar, NavItem, Header, Brand, FormControl, Label, Button } from 'react-bootstrap';
+import AuthActions from '../actions/AuthActions';
+import AuthStore from '../stores/AuthStore';
 
 class HeaderComponent extends Component {
+
   static contextTypes = {
     router: React.PropTypes.object.isRequired
-  }
+  };
 
   constructor() {
     super();
     this.state = {
-      authenticated: false,
+      user: AuthStore.getUser(),
+      authenticated: AuthStore.isAuthenticated(),
       username: '',
       password: ''
-    }
+    };
 
+
+    this.onChange = this.onChange.bind(this);
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
     this.changeUsername = this.changeUsername.bind(this);
@@ -30,15 +35,23 @@ class HeaderComponent extends Component {
   }
 
   componentWillMount() {
+    AuthStore.addChangeListener(this.onChange)
+  }
+
+  componentWillUnmount() {
+    AuthStore.removeListener(this.onChange);
+  }
+
+  onChange() {
+    this.setState({authenticated: AuthStore.isAuthenticated(), user: AuthStore.getUser()});
   }
 
   login() {
-    UserActions.auth(this.state.username, this.state.password);
-    if (localStorage.getItem('token') != '') this.setState({authenticated: true});
+    AuthActions.authenticate(this.state.username, this.state.password);
   }
 
   logout() {
-    this.setState({ authenticated: false });
+    AuthActions.deauthenticate();
     this.context.router.push('/');
   }
 
@@ -63,10 +76,14 @@ class HeaderComponent extends Component {
             {!this.state.authenticated ? (
                 <div>
                   <FormControl type="text" placeholder="Username..." onChange={this.changeUsername} />
-                  <FormControl type="text" placeholder="Password..." onChange={this.changePassword} />
-                  <Button onClick={this.login}>Login</Button></div>
+                  <FormControl type="password" placeholder="Password..." onChange={this.changePassword} />
+                  <Button onClick={this.login}>Login</Button>
+                </div>
               ) :
-              <Button onClick={this.logout}>Logout</Button>
+              <div>
+                Welcome {this.state.user.username}&nbsp;
+                <Button onClick={this.logout}>Logout</Button>
+              </div>
             }
           </Navbar.Form>
         </Navbar.Collapse>
