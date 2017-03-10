@@ -3,8 +3,10 @@
 import React, { Component } from 'react';
 import { Router, Route, IndexRoute } from 'react-router';
 import Home from './components/Home';
-
+import Project from './components/Projects/Project';
 import App from './components/App';
+
+
 
 class Root extends Component {
 
@@ -15,8 +17,8 @@ class Root extends Component {
     return (
       <Router history={this.props.history}>
         <Route path='/' component={App}>
-          <IndexRoute component={Home}/>
-          <Route path='/contact/:id' component={Home} />
+          <IndexRoute component={Home} />
+          <Route path='/project/:id' component={Project} />
           {/*<Route path='/contact/:id' component={ContactDetail} />*/}
         </Route>
       </Router>

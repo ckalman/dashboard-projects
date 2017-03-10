@@ -1,5 +1,6 @@
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ProjectConstants from '../constants/ProjectConstants';
+import Project from '../models/Project';
 import { EventEmitter } from 'events';
 
 const CHANGE_EVENT = 'change';
@@ -47,7 +48,7 @@ const ProjectStore = new ProjectStoreClass();
 ProjectStore.dispatchToken = AppDispatcher.register(action => {
     switch (action.actionType) {
         case ProjectConstants.PROJECT_ALL:
-            setProjects(action.projects);
+            setProjects(Project.constructAll(action.projects));
             ProjectStore.emitChange();
             break;
         case ProjectConstants.PROJECT_ERROR:
@@ -55,16 +56,23 @@ ProjectStore.dispatchToken = AppDispatcher.register(action => {
             ProjectStore.emitChange();
             break;
         case ProjectConstants.PROJECT_SEARCH:
-            setProjects(action.projects);
+            setProjects(Project.constructAll(action.projects));
             ProjectStore.emitChange();
             break;
         case ProjectConstants.PROJECT_SEARCH_ERROR:
             alert(action.message);
             ProjectStore.emitChange();
             break;
+        case ProjectConstants.PROJECT_FIRST:
+            setProject(new Project(action.project));
+            ProjectStore.emitChange();
+            break;
+        case ProjectConstants.PROJECT_FIRST_ERROR:
+            alert(action.message);
+            ProjectStore.emitChange();
+            break;
         default:
     }
-
 });
 
 export default ProjectStore;

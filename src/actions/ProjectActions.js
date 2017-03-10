@@ -29,5 +29,18 @@ export default {
                 message: error
             });
         });
+    },
+    first: (id) => {
+        ProjectApi.first(`${config.BASE_URL}/projects/${id}`).then(project => {
+            AppDispatcher.dispatch({
+                actionType: ProjectConstants.PROJECT_FIRST,
+                project: project
+            });
+        }).catch(error => {
+            AppDispatcher.dispatch({
+                actionType: ProjectConstants.PROJECT_FIRST_ERROR,
+                message: error
+            });
+        });
     }
 }
