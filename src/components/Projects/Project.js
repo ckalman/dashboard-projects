@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import ProjectStore from '../../stores/ProjectStore';
 import ProjectActions from '../../actions/ProjectActions';
+import TagStore from '../../stores/TagStore';
+import TagActions from '../../actions/TagActions';
 import moment from 'moment';
+import CheckBoxModel from '../../models/Checkbox';
 import { Panel, Col, Table, Form, FormControl, FormGroup, ControlLabel, Checkbox, Button } from 'react-bootstrap';
 
 class ProjectComponent extends Component {
@@ -10,29 +13,37 @@ class ProjectComponent extends Component {
         super();
         this.state = {
             project: {},
+            tags: null,
+            tagsCheckBox: [],
         }
         this.onChange = this.onChange.bind(this);
         ProjectActions.all();
+        TagActions.all();
     }
 
     componentWillMount() {
         var id = this.props.params.id
         ProjectStore.addChangeListener(this.onChange);
+        TagStore.addChangeListener(this.onChange);
         ProjectActions.first(id);
     }
 
     componentWillUnmount() {
         ProjectStore.removeListener(this.onChange);
+        TagStore.removeListener(this.onChange);
     }
 
     onChange() {
         this.setState({
-            project: ProjectStore.getProject()
+            project: ProjectStore.getProject(),
+            tags: TagStore.getTags()
         });
-        console.log(this.state.project);
+        if (this.state.project.tags != null && this.state.tags != null) {
+            this.setState({ tagsCheckBox: this.loadCheckbox(this.state.project, this.state.tags) })
+        }
     }
 
-    save(){
+    save() {
         console.log("prout");
     }
 
@@ -43,6 +54,47 @@ class ProjectComponent extends Component {
     handleFilterComboBoxChange(e) {
         this.setState({ filterType: e.target.value });
     }
+
+    toggleCheckbox(index) {
+        var checkbox = this.state.tagsCheckBox[index];
+        this.state.tagsCheckBox[index].checked = !checkbox.isChecked()
+        this.setState({
+            tagsCheckBox: this.state.tagsCheckBox
+        });
+    }
+
+    // TODO: refactor
+    loadCheckbox(project, tags) {
+        var temp = [];
+        tags.map((tag) => {
+            var checked = false;
+            project.tags.forEach((t) => {
+                if (t == tag) checked = true;
+            });
+            temp.push(new CheckBoxModel({
+                name: tag,
+                value: tag,
+                checked: checked
+            }));
+        });
+        return temp;
+    }
+
+    renderCheckBoxes() {
+        return this.state.tagsCheckBox.map((checkbox, index) =>
+            <div key={index}>
+                <label>
+                    <input
+                        type="checkbox"
+                        checked={checkbox.isChecked()}
+                        onChange={this.toggleCheckbox.bind(this, index)}
+                        />
+                    {checkbox.name}
+                </label>
+            </div>
+        );
+    }
+
     render() {
         var project = this.state.project;
         return (
@@ -55,16 +107,16 @@ class ProjectComponent extends Component {
                                     Title
                                 </Col>
                                 <Col sm={10}>
-                                    <FormControl type="text" placeholder="Project title" value={project.title} onChange={(e) => {this.setState({project: Object.assign({}, project, {title: e.target.value})})}}/>
+                                    <FormControl type="text" placeholder="Project title" value={project.title} onChange={(e) => { this.setState({ project: Object.assign({}, project, { title: e.target.value }) }) } } />
                                 </Col>
                             </FormGroup>
 
                             <FormGroup controlId="formDeadline">
                                 <Col componentClass={ControlLabel} sm={2}>
-                                    Deadline
+                                    Deadline {moment(project.deadline).format('YYYY-MM-DD')} {project.deadline}
                                 </Col>
                                 <Col sm={10}>
-                                    <FormControl type="date" value={project.deadline} />
+                                    <FormControl type="date" value={moment(project.deadline).format('YYYY-MM-DD')} onChange={(e) => { this.setState({ project: Object.assign({}, project, { deadline: e.target.value }) }) } } />
                                 </Col>
                             </FormGroup>
 
@@ -73,7 +125,8 @@ class ProjectComponent extends Component {
                                     Tags
                                 </Col>
                                 <Col sm={10}>
-                                    <FormControl type="text" placeholder="Password" />
+                                    {this.renderCheckBoxes()}
+                                    <FormControl type="text" placeholder="Tags" />
                                 </Col>
                             </FormGroup>
 

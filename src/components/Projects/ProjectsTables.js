@@ -6,6 +6,10 @@ import { Panel, Col, Table, FormControl, Button } from 'react-bootstrap';
 
 class ProjectsComponent extends Component {
 
+    static contextTypes = {
+        router: React.PropTypes.object.isRequired
+    }
+
     constructor() {
         super();
         this.state = {
@@ -37,14 +41,14 @@ class ProjectsComponent extends Component {
         this.setState({ search: e.target.value });
     }
 
-    handleFilterComboBoxChange(e){
+    handleFilterComboBoxChange(e) {
         this.setState({ filterType: e.target.value });
     }
 
     handleClickSearch() {
-        if(this.state.filterType != ''){
+        if (this.state.filterType != '') {
             ProjectActions.search(this.state.filterType, this.state.search);
-        }else{
+        } else {
             ProjectActions.all();
         }
     }
@@ -78,7 +82,7 @@ class ProjectsComponent extends Component {
                         <tbody>
                             {this.state.projects.map(function (project, index) {
                                 return (
-                                    <tr key={index}>
+                                    <tr key={index} onClick={() => {window.location = "/project/" + project.id}}>
                                         <td>{project.title}</td>
                                         <td>{project.projectManager.firstname} {project.projectManager.lastname}</td>
                                         <td>{moment(project.deadline).format('DD-MM-YYYY')}</td>
