@@ -53,6 +53,7 @@ class HeaderComponent extends Component {
   logout() {
     AuthActions.deauthenticate();
     this.context.router.push('/');
+    this.setState({username:'',password:''});
   }
 
   render() {
@@ -69,7 +70,11 @@ class HeaderComponent extends Component {
         <Navbar.Collapse>
           <Navbar.Form pullLeft>
             <Nav>
-              <NavItem eventKey={1} href="#">Home</NavItem>
+              <NavItem href="/">Home</NavItem>
+              {this.state.user.isAdmin() ? (
+                  <NavItem href="/admin">Admin</NavItem>
+                ):''
+              }
             </Nav>
           </Navbar.Form>
           <Navbar.Form pullRight>

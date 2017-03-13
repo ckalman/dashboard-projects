@@ -4,7 +4,7 @@ import UserApi from '../utils/UserApi';
 import config from 'config';
 
 export default {
-    auth: (username, password) => {
+    create: (username, password) => {
         UserApi.auth(`${config.BASE_URL}/auth`, username, password).then(user => {
             AppDispatcher.dispatch({
                 actionType: UserConstants.USER_ALL,

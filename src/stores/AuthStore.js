@@ -1,5 +1,6 @@
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import AuthConstants from '../constants/AuthConstants';
+import User from '../models/User';
 import jwt_decode from 'jwt-decode';
 import { EventEmitter } from 'events';
 
@@ -9,7 +10,6 @@ const USER = 'user';
 
 
 function setUser(user) {
-  console.log("my user : ", user);
   localStorage.setItem(USER, JSON.stringify(user));
 }
 
@@ -37,7 +37,7 @@ class AuthStoreClass extends EventEmitter {
   }
 
   getUser(){
-    return JSON.parse(localStorage.getItem(USER));
+    return new User(JSON.parse(localStorage.getItem(USER)));
   }
 
   isAuthenticated() {

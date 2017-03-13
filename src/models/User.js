@@ -23,12 +23,13 @@ export default class User {
     static constructAll(usersData){
         var temp = [];
         usersData.forEach(function(user) {
-            temp.push(new Project(user));            
+            temp.push(new Project(user));
         });
         return temp;
     }
 
     isAdmin(){
-        this.role == roles.admin;
+      console.log(this.role == roles.admin);
+        return this.role == roles.admin;
     }
 }
