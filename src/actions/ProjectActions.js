@@ -42,5 +42,18 @@ export default {
                 message: error
             });
         });
+    },
+    update: (project) => {
+         ProjectApi.update(`${config.BASE_URL}/projects`, project).then(project => {
+            AppDispatcher.dispatch({
+                actionType: ProjectConstants.PROJECT_UPDATE,
+                project: project
+            });
+        }).catch(error => {
+            AppDispatcher.dispatch({
+                actionType: ProjectConstants.PROJECT_UPDATE_ERROR,
+                message: error
+            });
+        });
     }
 }

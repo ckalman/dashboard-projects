@@ -39,7 +39,7 @@ export default {
                 });
         });
     },
-    
+
     search: (apiUrl) => {
         return new Promise((resolve, reject) => {
             request
@@ -57,5 +57,25 @@ export default {
                     }
                 });
         });
-    }
+    },
+
+    update: (apiUrl, project) => {
+        return new Promise((resolve, reject) => {
+            request
+                .put(apiUrl)
+                .set('Content-Type', 'application/json')
+                .send(project)
+                .end((err, response) => {
+                    if (err) {
+                        console.error("Get all projects : ", err);
+                        reject(response.body.message);
+                    }
+                    if (response != undefined) {
+                        resolve(response.body);
+                    } else {
+                        reject("Error when retrive all projects. Please check your connection or the backend server.");
+                    }
+                });
+        });
+    },
 }

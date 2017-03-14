@@ -7,4 +7,6 @@ export default keyMirror({
   PROJECT_SEARCH_ERROR: null,
   PROJECT_FIRST: null,
   PROJECT_FIRST_ERROR: null,
+  PROJECT_UPDATE: null,
+  PROJECT_UPDATE_ERROR: null,
 });
