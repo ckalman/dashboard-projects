@@ -78,4 +78,22 @@ export default {
                 });
         });
     },
+    remove: (apiUrl, id) => {
+        return new Promise((resolve, reject) => {
+            request
+                .del(apiUrl)
+                .send({id})
+                .end((err, response) => {
+                    if (err) {
+                        console.error("Remove project : ", err);
+                        reject(response.body.message);
+                    }
+                    if (response != undefined) {
+                        resolve(response.body);
+                    } else {
+                        reject("Error when remove project.");
+                    }
+                });
+        });
+    },
 }

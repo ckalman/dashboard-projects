@@ -82,7 +82,7 @@ class ProjectsComponent extends Component {
                         <tbody>
                             {this.state.projects.map(function (project, index) {
                                 return (
-                                    <tr key={index} onClick={() => {window.location = "/project/" + project.id}}>
+                                    <tr key={index} onClick={() => { window.location = "/project/" + project.id }}>
                                         <td>{project.title}</td>
                                         <td>{project.projectManager.firstname} {project.projectManager.lastname}</td>
                                         <td>{moment(project.deadline).format('DD-MM-YYYY')}</td>
