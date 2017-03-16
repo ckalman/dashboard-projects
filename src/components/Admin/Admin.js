@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import { Panel, Col, Form, FormControl, FormGroup, ControlLabel, Button } from 'react-bootstrap';
 import UserActions from '../../actions/UserActions'
-import UserStore from '../../stores/UserStore';
 import ProjectActions from '../../actions/ProjectActions'
-import ProjectStore from '../../stores/ProjectStore';
 
 
 class AdminComponent extends Component {
@@ -17,9 +15,13 @@ class AdminComponent extends Component {
       username:'',
       email:'',
       password:'',
-      role:''
+      role:'',
+      confirmPassword:''
     }
     this.onChange = this.onChange.bind(this);
+    this.fieldValidation = this.fieldValidation.bind(this);
+    this.passwordValidation = this.passwordValidation.bind(this);
+    this.fieldValidation = this.fieldValidation.bind(this);
     this.createUser = this.createUser.bind(this);
     this.deleteAllProjects = this.deleteAllProjects.bind(this);
   }
@@ -45,7 +47,21 @@ class AdminComponent extends Component {
 
 
   createUser() {
-    UserActions.create();
+    UserActions.create(this.state.user);
+  }
+
+  fieldValidation(){
+    const length = this.state.value.length;
+    if (length > 10) return 'success';
+    else if (length > 5) return 'warning';
+    else if (length > 0) return 'error';
+  }
+
+  passwordValidation(){
+    const length = this.state.value.length;
+    if (length > 10) return 'success';
+    else if (length > 5) return 'warning';
+    else if (length > 0) return 'error';
   }
 
 
@@ -97,7 +113,7 @@ class AdminComponent extends Component {
                 Confirm password :
               </Col>
               <Col sm={2}>
-                <FormControl type="password" />
+                <FormControl type="password" onChange={this.changeConfirmPassword} />
               </Col>
             </FormGroup>
 

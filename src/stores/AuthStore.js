@@ -36,12 +36,16 @@ class AuthStoreClass extends EventEmitter {
     this.removeListener(CHANGE_EVENT, callback)
   }
 
-  getUser(){
-    return new User(JSON.parse(localStorage.getItem(USER)));
+  isAuthenticated() {
+    return this.getToken() != '' && this.getToken() != null;
   }
 
-  isAuthenticated() {
-    return localStorage.getItem(TOKEN) != '' && localStorage.getItem(TOKEN) != null;
+  getToken() {
+    return localStorage.getItem(TOKEN);
+  }
+
+  getUser(){
+    return new User(JSON.parse(localStorage.getItem(USER)));
   }
 
 }

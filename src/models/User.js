@@ -4,6 +4,7 @@ export default class User {
 
     id = null;
     username = null;
+    password = null;
     firstname = null;
     lastname = null;
     role = null;
@@ -13,6 +14,7 @@ export default class User {
         if (data) {
             this.id = data._id || data.id || null;
             this.username = data.username || null;
+            this.password = data.password || null;
             this.firstname = data.firstname || null;
             this.lastname = data.lastname || null;
             this.role = data.role || null;

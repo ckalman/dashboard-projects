@@ -81,7 +81,6 @@ ProjectStore.dispatchToken = AppDispatcher.register(action => {
             ProjectStore.emitChange();
             break;
         case ProjectConstants.PROJECT_REMOVE:
-            alert("Project successfully deleted");
             setProject({});
             ProjectStore.emitChange();
             break;

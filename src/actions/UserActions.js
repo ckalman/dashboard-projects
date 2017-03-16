@@ -16,5 +16,18 @@ export default {
                 message: error
             });
         });
-    }
+    },
+  create: (user) => {
+    UserApi.create(`${config.BASE_URL}/user`, user).then(user => {
+      AppDispatcher.dispatch({
+        actionType: UserConstants.USER,
+        user: user
+      });
+    }).catch(error => {
+      AppDispatcher.dispatch({
+        actionType: UserConstants.USER_ERROR,
+        message: error
+      });
+    });
+  },
 }

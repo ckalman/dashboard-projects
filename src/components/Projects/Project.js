@@ -12,6 +12,10 @@ import { Panel, Col, Table, Form, FormControl, FormGroup, ControlLabel, Checkbox
 
 class ProjectComponent extends Component {
 
+    static contextTypes = {
+      router: React.PropTypes.object.isRequired
+    };
+
     constructor() {
         super();
         this.tagsLoaded = false;
@@ -50,7 +54,7 @@ class ProjectComponent extends Component {
         var project = ProjectStore.getProject();
         var tags = TagStore.getTags();
         if (project.title != undefined && tags != null && !this.tagsLoaded) {
-            this.loaded = true;
+            this.tagsLoaded = true;
             var checkBox = this.loadCheckbox(project, tags);
             this.setState({ tagsCheckBox: checkBox });
         }
@@ -124,6 +128,7 @@ class ProjectComponent extends Component {
 
     handleDelete() {
         ProjectActions.remove(this.state.project.id);
+        window.location = '/';
     }
 
     getTagsFromCheckBox(checkbox) {

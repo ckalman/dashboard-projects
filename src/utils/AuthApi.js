@@ -8,7 +8,7 @@ export default {
         .send({username, password})
         .end((err, response) => {
           if(err){
-            console.error("Get all projects : ", err);
+            console.error("Authenticate user : ", err);
             reject(response.body);
           }
           if(response.status == 200){
