@@ -30,11 +30,11 @@ class UserStoreClass extends EventEmitter {
     }
 
     getUser() {
-        return _User;
+        return _user;
     }
 
     getUsers() {
-        return _Users;
+        return _users;
     }
 
 }
@@ -46,11 +46,19 @@ const UserStore = new UserStoreClass();
 // respond appropriately
 UserStore.dispatchToken = AppDispatcher.register(action => {
     switch (action.actionType) {
-        case UserConstants.USER_ALL:
-            setUsers(action.Users);
+        case UserConstants.USER:
+            setUser(action.user);
             UserStore.emitChange();
             break
         case UserConstants.USER_ERROR:
+            alert(action.message);
+            UserStore.emitChange();
+            break
+        case UserConstants.USER_ALL:
+            setUsers(action.users);
+            UserStore.emitChange();
+            break
+        case UserConstants.USER_ALL_ERROR:
             alert(action.message);
             UserStore.emitChange();
             break

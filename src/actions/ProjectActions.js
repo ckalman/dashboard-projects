@@ -42,5 +42,31 @@ export default {
                 message: error
             });
         });
+    },
+    update: (project) => {
+         ProjectApi.update(`${config.BASE_URL}/projects`, project).then(project => {
+            AppDispatcher.dispatch({
+                actionType: ProjectConstants.PROJECT_UPDATE,
+                project: project
+            });
+        }).catch(error => {
+            AppDispatcher.dispatch({
+                actionType: ProjectConstants.PROJECT_UPDATE_ERROR,
+                message: error
+            });
+        });
+    },
+    remove: (id) => {
+        ProjectApi.remove(`${config.BASE_URL}/projects`, id).then(response => {
+            AppDispatcher.dispatch({
+                actionType: ProjectConstants.PROJECT_REMOVE,
+                project: {}
+            });
+        }).catch(error => {
+            AppDispatcher.dispatch({
+                actionType: ProjectConstants.PROJECT_REMOVE_ERROR,
+                message: error
+            });
+        });
     }
 }

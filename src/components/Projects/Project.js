@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
+import UserStore from '../../stores/UserStore';
+import UserActions from '../../actions/UserActions';
 import ProjectStore from '../../stores/ProjectStore';
 import ProjectActions from '../../actions/ProjectActions';
 import TagStore from '../../stores/TagStore';
 import TagActions from '../../actions/TagActions';
 import moment from 'moment';
+import _ from 'lodash';
 import CheckBoxModel from '../../models/Checkbox';
 import { Panel, Col, Table, Form, FormControl, FormGroup, ControlLabel, Checkbox, Button } from 'react-bootstrap';
 
@@ -11,40 +14,46 @@ class ProjectComponent extends Component {
 
     constructor() {
         super();
+        this.tagsLoaded = false;
         this.state = {
             project: {},
-            tags: null,
+            tags: [],
             tagsCheckBox: [],
         }
         this.onChange = this.onChange.bind(this);
-        ProjectActions.all();
+        this.handleDelete = this.handleDelete.bind(this);
         TagActions.all();
+        UserActions.all();
     }
 
     componentWillMount() {
-        var id = this.props.params.id
+        var id = this.props.params.id;
+        ProjectActions.first(id);
         ProjectStore.addChangeListener(this.onChange);
         TagStore.addChangeListener(this.onChange);
-        ProjectActions.first(id);
+        UserStore.addChangeListener(this.onChange);
     }
 
     componentWillUnmount() {
         ProjectStore.removeListener(this.onChange);
         TagStore.removeListener(this.onChange);
+        UserStore.removeListener(this.onChange);
     }
 
     onChange() {
         this.setState({
             project: ProjectStore.getProject(),
-            tags: TagStore.getTags()
+            users: UserStore.getUsers(),
+            tags: TagStore.getTags(),
         });
-        if (this.state.project.tags != null && this.state.tags != null) {
-            this.setState({ tagsCheckBox: this.loadCheckbox(this.state.project, this.state.tags) })
-        }
-    }
 
-    save() {
-        console.log("prout");
+        var project = ProjectStore.getProject();
+        var tags = TagStore.getTags();
+        if (project.title != undefined && tags != null && !this.tagsLoaded) {
+            this.loaded = true;
+            var checkBox = this.loadCheckbox(project, tags);
+            this.setState({ tagsCheckBox: checkBox });
+        }
     }
 
     handleFilterUserInputChange(e) {
@@ -66,7 +75,8 @@ class ProjectComponent extends Component {
     // TODO: refactor
     loadCheckbox(project, tags) {
         var temp = [];
-        tags.map((tag) => {
+        var all = _.union(project, tags);
+        all.map((tag) => {
             var checked = false;
             project.tags.forEach((t) => {
                 if (t == tag) checked = true;
@@ -77,21 +87,58 @@ class ProjectComponent extends Component {
                 checked: checked
             }));
         });
-        return temp;
+        return _.sortBy(temp, 'value');
     }
 
-    renderCheckBoxes() {
-        return this.state.tagsCheckBox.map((checkbox, index) =>
-            <div key={index}>
+    addTag() {
+        var tag = this.state.addTag;
+        var tagCheckBox = new CheckBoxModel({
+            name: tag,
+            value: tag,
+            checked: true,
+        });
+        this.state.tagsCheckBox.push(tagCheckBox);
+        this.setState({ tagsCheckBox: _.uniqBy(this.state.tagsCheckBox, 'value') });
+    }
+
+    renderCheckBoxes(checkboxes) {
+        return checkboxes.map((checkbox, index) =>
+            <Col sm={3} key={index}>
                 <label>
                     <input
                         type="checkbox"
                         checked={checkbox.isChecked()}
                         onChange={this.toggleCheckbox.bind(this, index)}
-                        />
+                    />
                     {checkbox.name}
                 </label>
-            </div>
+            </Col>
+        );
+    }
+
+    handleSubmit(e) {
+        e.preventDefault();
+        this.state.project.tags = this.getTagsFromCheckBox(this.state.tagsCheckBox);
+        ProjectActions.update(this.state.project);
+    }
+
+    handleDelete() {
+        ProjectActions.remove(this.state.project.id);
+    }
+
+    getTagsFromCheckBox(checkbox) {
+        var temp = [];
+        checkbox.forEach((c) => {
+            if (c.isChecked()) {
+                temp.push(c.name);
+            }
+        });
+        return temp;
+    }
+
+    renderDropDownList() {
+        return this.state.users.map((user, index) =>
+            <option key={index} selected={user.id == this.state.project.projectManager.id} value={index}>{user.firstname} {user.lastname}</option>
         );
     }
 
@@ -101,22 +148,33 @@ class ProjectComponent extends Component {
             <div>
                 {this.state.project.title != undefined ? (
                     <Panel header={`Project : ${this.state.project.title}`}>
-                        <Form horizontal>
+                        <Form onSubmit={(e) => { this.handleSubmit(e); }} horizontal>
                             <FormGroup controlId="formTitle">
                                 <Col componentClass={ControlLabel} sm={2}>
                                     Title
                                 </Col>
                                 <Col sm={10}>
-                                    <FormControl type="text" placeholder="Project title" value={project.title} onChange={(e) => { this.setState({ project: Object.assign({}, project, { title: e.target.value }) }) } } />
+                                    <FormControl type="text" placeholder="Project title" value={project.title} onChange={(e) => { this.setState({ project: Object.assign({}, project, { title: e.target.value }) }) }} />
                                 </Col>
                             </FormGroup>
 
                             <FormGroup controlId="formDeadline">
                                 <Col componentClass={ControlLabel} sm={2}>
-                                    Deadline {moment(project.deadline).format('YYYY-MM-DD')} {project.deadline}
+                                    Deadline
                                 </Col>
                                 <Col sm={10}>
-                                    <FormControl type="date" value={moment(project.deadline).format('YYYY-MM-DD')} onChange={(e) => { this.setState({ project: Object.assign({}, project, { deadline: e.target.value }) }) } } />
+                                    <FormControl type="date" value={moment(project.deadline).format('YYYY-MM-DD')} onChange={(e) => { this.setState({ project: Object.assign({}, project, { deadline: e.target.value }) }) }} />
+                                </Col>
+                            </FormGroup>
+
+                            <FormGroup controlId="formControlsSelect">
+                                <Col componentClass={ControlLabel} sm={2}>
+                                    <ControlLabel>Project Manager</ControlLabel>
+                                </Col>
+                                <Col sm={10}>
+                                    <FormControl componentClass="select" placeholder="select" onChange={(e) => { this.setState({ project: Object.assign({}, project, { projectManager: this.state.users[e.target.value] }) }) }}>
+                                        {this.renderDropDownList()}
+                                    </FormControl>
                                 </Col>
                             </FormGroup>
 
@@ -124,9 +182,13 @@ class ProjectComponent extends Component {
                                 <Col componentClass={ControlLabel} sm={2}>
                                     Tags
                                 </Col>
+
                                 <Col sm={10}>
-                                    {this.renderCheckBoxes()}
-                                    <FormControl type="text" placeholder="Tags" />
+                                    {this.renderCheckBoxes(this.state.tagsCheckBox)}
+                                    <Col sm={12}>
+                                        <Col sm={10}><FormControl type="text" placeholder="Tags" onChange={(e) => { this.setState({ addTag: e.target.value }) }} /></Col>
+                                        <Col sm={2}><Button onClick={() => { this.addTag(); }}>+</Button></Col>
+                                    </Col>
                                 </Col>
                             </FormGroup>
 
@@ -135,14 +197,17 @@ class ProjectComponent extends Component {
                                     Description
                                 </Col>
                                 <Col sm={10}>
-                                    <FormControl componentClass="textarea" placeholder="textarea" />
+                                    <FormControl componentClass="textarea" placeholder="textarea" value={project.description} onChange={(e) => { this.setState({ project: Object.assign({}, project, { description: e.target.value }) }) }} />
                                 </Col>
                             </FormGroup>
 
                             <FormGroup>
                                 <Col smOffset={2} sm={10}>
-                                    <Button onClick={this.save}>
-                                        Sign in
+                                    <Button type="submit">
+                                        Save
+                                    </Button>
+                                    <Button onClick={this.handleDelete}>
+                                        Delete
                                     </Button>
                                 </Col>
                             </FormGroup>

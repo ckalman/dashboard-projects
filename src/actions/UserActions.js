@@ -4,15 +4,15 @@ import UserApi from '../utils/UserApi';
 import config from 'config';
 
 export default {
-    create: (username, password) => {
-        UserApi.auth(`${config.BASE_URL}/auth`, username, password).then(user => {
+   all: () => {
+        UserApi.all(`${config.BASE_URL}/users`).then(users => {
             AppDispatcher.dispatch({
                 actionType: UserConstants.USER_ALL,
-                user: user
+                users: users
             });
         }).catch(error => {
             AppDispatcher.dispatch({
-                actionType: UserConstants.USER_ERROR,
+                actionType: UserConstants.USER_ALL_ERROR,
                 message: error
             });
         });
