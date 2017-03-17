@@ -52,7 +52,7 @@ class HeaderComponent extends Component {
 
   logout() {
     AuthActions.deauthenticate();
-    this.context.router.push('/');
+    window.location = '/';
     this.setState({username:'',password:''});
   }
 

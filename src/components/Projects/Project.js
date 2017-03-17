@@ -6,22 +6,26 @@ import FormProject from '../Projects/FormProject';
 class ProjectComponent extends Component {
 
     static contextTypes = {
-      router: React.PropTypes.object.isRequired
+        router: React.PropTypes.object.isRequired
     };
 
     constructor() {
         super();
         this.state = {
-            edit: false,
+            create: false,
             project: {},
         }
         this.onChange = this.onChange.bind(this);
     }
     componentWillMount() {
         var id = this.props.params.id;
-        ProjectStore.addChangeListener(this.onChange);
+        
+        ProjectStore.addChangeListener(this.onChange);     
         ProjectActions.first(id);
-        this.setState({edit: true});
+                
+        if (!id) {
+            this.setState({ create: true });
+        }
     }
 
     onChange() {
@@ -32,15 +36,10 @@ class ProjectComponent extends Component {
 
 
     render() {
-        var { edit, project} = this.state;
+        var { edit, project, create} = this.state;
         return (
             <div>
-                {project.title != undefined ? (
-                    <FormProject edit={edit} project={project} />
-                ) : (
-                        <div></div>
-                    )}
-
+                <FormProject create={create} project={project} />
             </div>
         );
     }

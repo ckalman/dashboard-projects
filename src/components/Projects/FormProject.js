@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import AuthStore from '../../stores/AuthStore';
 import UserStore from '../../stores/UserStore';
 import UserActions from '../../actions/UserActions';
 import ProjectStore from '../../stores/ProjectStore';
@@ -10,7 +11,9 @@ import renderDropDownList from '../bootstrap/DropDownList';
 import moment from 'moment';
 import _ from 'lodash';
 import CheckBoxModel from '../../models/Checkbox';
+import FormValidator from '../../validators/BootstrapProjectValidator';
 import { Panel, Col, Table, Form, FormControl, FormGroup, ControlLabel, Checkbox, Button } from 'react-bootstrap';
+
 
 class FormProjectComponent extends Component {
 
@@ -25,6 +28,7 @@ class FormProjectComponent extends Component {
             tags: [],
             tagsCheckBox: [],
             edit: false,
+            create: false,
         }
         this.tagsLoaded = false;
         this.onChange = this.onChange.bind(this);
@@ -32,12 +36,16 @@ class FormProjectComponent extends Component {
     }
 
     componentWillMount() {
-        this.setState({ edit: !this.props.edit });
+       
+
         ProjectStore.addChangeListener(this.onChange);
         TagStore.addChangeListener(this.onChange);
         UserStore.addChangeListener(this.onChange);
+
         TagActions.all();
         UserActions.all();
+
+        this.setState({ create: this.props.create });
     }
 
     componentWillUnmount() {
@@ -47,15 +55,28 @@ class FormProjectComponent extends Component {
     }
 
     onChange() {
+        var user = AuthStore.getUser();
+        var edit = user.isAdmin();
+        var project = ProjectStore.getProject();
+        
+        if(!edit && project.projectManager){
+           edit =  user.isOwner(project.projectManager.id);
+        }
+
         this.setState({
             project: ProjectStore.getProject(),
-            users: UserStore.getUsers(),
+            users: [{firstname: '', lastname: ''}].concat(UserStore.getUsers()),
             tags: TagStore.getTags(),
+            edit: !edit
         });
 
         if (!this.tagsLoaded && TagStore.getTags().length > 0) {
             this.tagsLoaded = true;
-            this.setState({tagsCheckBox: this.loadCheckbox(ProjectStore.getProject(), TagStore.getTags())});
+            this.setState({ tagsCheckBox: this.loadCheckbox(ProjectStore.getProject(), TagStore.getTags()) });
+        }
+        // Redirection
+        if(this.state.create && this.state.project.id){
+            window.location = '/project/' + this.state.project.id;
         }
     }
 
@@ -116,7 +137,15 @@ class FormProjectComponent extends Component {
     handleSubmit(e) {
         e.preventDefault();
         this.state.project.tags = this.getTagsFromCheckBox(this.state.tagsCheckBox);
-        ProjectActions.update(this.state.project);
+        if (this.state.create) {
+            if(!this.state.project.projectManager){
+                this.state.project.projectManager = this.state.users[0];
+            }
+            ProjectActions.create(this.state.project);
+        } else {
+            ProjectActions.update(this.state.project);
+        }
+
     }
 
     handleDelete() {
@@ -137,93 +166,98 @@ class FormProjectComponent extends Component {
 
 
     render() {
-        const { project, users, tags, tagsCheckBox, edit} = this.state;
-        console.log(tagsCheckBox);
+        const { project, users, tags, tagsCheckBox, edit, create } = this.state;
+        const validator = new FormValidator(project);
         return (
             <div>
-                {project.title != undefined ? (
-                    <Panel header={`Project : ${project.title}`}>
-                        <Form onSubmit={(e) => { this.handleSubmit(e); } } horizontal>
-                            <FormGroup controlId="formTitle">
-                                <Col componentClass={ControlLabel} sm={2}>
-                                    Title
+                <Panel header={`Project : ${project.title}`}>
+                    <Form onSubmit={(e) => { this.handleSubmit(e); } } horizontal>
+                        <FormGroup controlId="formTitle" validationState={validator.getState('title')} >
+                            <Col componentClass={ControlLabel} sm={2}>
+                                Title
                                 </Col>
-                                <Col sm={10}>
-                                    <FormControl type="text" placeholder="Project title" value={project.title} disabled={edit} onChange={(e) => { this.setState({ project: Object.assign({}, project, { title: e.target.value }) }) } } />
-                                </Col>
-                            </FormGroup>
+                            <Col sm={10}>
+                                <FormControl type="text" placeholder="Project title" value={project.title} disabled={edit} onChange={(e) => { this.setState({ project: Object.assign({}, project, { title: e.target.value }) }) } } />
+                            </Col>
+                        </FormGroup>
 
-                            <FormGroup controlId="formTitle">
-                                <Col componentClass={ControlLabel} sm={2}>
-                                    Status
+                        <FormGroup controlId="formTitle" validationState={validator.getState('status')}>
+                            <Col componentClass={ControlLabel} sm={2}>
+                                Status
                                 </Col>
-                                <Col sm={10}>
-                                    <FormControl componentClass="select" placeholder="status" disabled={edit} onChange={(e) => { this.setState({ project: Object.assign({}, project, { status: Status.status[e.target.value] }) }) } }>
-                                        {renderDropDownList(Status.status, (status) => { return `${status}` }, (status, index) => { return status == project.status })}
-                                    </FormControl>
-                                </Col>
-                            </FormGroup>
+                            <Col sm={10}>
+                                <FormControl componentClass="select" placeholder="status" disabled={edit} onChange={(e) => { this.setState({ project: Object.assign({}, project, { status: Status.status[e.target.value] }) }) } }>
+                                    {renderDropDownList(Status.status, (status) => { return `${status}` }, (status, index) => { return status == project.status })}
+                                </FormControl>
+                            </Col>
+                        </FormGroup>
 
-                            <FormGroup controlId="formDeadline">
-                                <Col componentClass={ControlLabel} sm={2}>
-                                    Deadline
+                        <FormGroup controlId="formDeadline" validationState={validator.getState('deadline')}>
+                            <Col componentClass={ControlLabel} sm={2}>
+                                Deadline
                                 </Col>
-                                <Col sm={10}>
-                                    <FormControl type="date" value={moment(project.deadline).format('YYYY-MM-DD')} disabled={edit} onChange={(e) => { this.setState({ project: Object.assign({}, project, { deadline: e.target.value }) }) } } />
-                                </Col>
-                            </FormGroup>
+                            <Col sm={10}>
+                                <FormControl type="date" value={moment(project.deadline).format('YYYY-MM-DD')} disabled={edit} onChange={(e) => { this.setState({ project: Object.assign({}, project, { deadline: e.target.value }) }) } } />
+                            </Col>
+                        </FormGroup>
 
-                            <FormGroup controlId="formControlsSelect">
-                                <Col componentClass={ControlLabel} sm={2}>
-                                    <ControlLabel>Project Manager</ControlLabel>
-                                </Col>
-                                <Col sm={10}>
-                                    <FormControl componentClass="select" placeholder="select" disabled={edit} onChange={(e) => { this.setState({ project: Object.assign({}, project, { projectManager: users[e.target.value] }) }) } }>
-                                        {renderDropDownList(users, (user) => { return `${user.firstname} ${user.lastname}` }, (user, index) => { return user.id == project.projectManager.id })}
-                                    </FormControl>
-                                </Col>
-                            </FormGroup>
+                        <FormGroup controlId="formControlsSelect">
+                            <Col componentClass={ControlLabel} sm={2}>
+                                <ControlLabel>Project Manager</ControlLabel>
+                            </Col>
+                            <Col sm={10}>
+                                <FormControl componentClass="select" placeholder="select" disabled={edit} onChange={(e) => { this.setState({ project: Object.assign({}, project, { projectManager: users[e.target.value] }) }) } }>
+                                    {renderDropDownList(users, (user) => { return `${user.firstname} ${user.lastname}` }, (user, index) => { {return project.projectManager && user.id == project.projectManager.id}})}
+                                </FormControl>
+                            </Col>
+                        </FormGroup>
 
-                            <FormGroup controlId="formTags">
-                                <Col componentClass={ControlLabel} sm={2}>
-                                    Tags
+                        <FormGroup controlId="formTags">
+                            <Col componentClass={ControlLabel} sm={2}>
+                                Tags
                                 </Col>
 
-                                <Col sm={10} disabled={edit}>
-                                    {this.renderCheckBoxes(tagsCheckBox)}
-                                    <Col sm={12}>
-                                        <Col sm={10}><FormControl type="text" placeholder="Tags" disabled={edit} onChange={(e) => { this.setState({ addTag: e.target.value }) } } /></Col>
-                                        <Col sm={2}><Button disabled={edit} onClick={() => { this.addTag(); } }>+</Button></Col>
-                                    </Col>
+                            <Col sm={10} disabled={edit}>
+                                {this.renderCheckBoxes(tagsCheckBox)}
+                                <Col sm={12}>
+                                    <Col sm={10}><FormControl type="text" placeholder="Tags" disabled={edit} onChange={(e) => { this.setState({ addTag: e.target.value }) } } /></Col>
+                                    <Col sm={2}><Button disabled={edit} onClick={() => { this.addTag(); } }>+</Button></Col>
                                 </Col>
-                            </FormGroup>
+                            </Col>
+                        </FormGroup>
 
-                            <FormGroup controlId="formDescription">
-                                <Col componentClass={ControlLabel} sm={2}>
-                                    Description
+                        <FormGroup controlId="formDescription" validationState={validator.getState('description')}>
+                            <Col componentClass={ControlLabel} sm={2}>
+                                Description
                                 </Col>
-                                <Col sm={10}>
-                                    <FormControl componentClass="textarea" placeholder="textarea" disabled={edit} value={project.description} onChange={(e) => { this.setState({ project: Object.assign({}, project, { description: e.target.value }) }) } } />
-                                </Col>
-                            </FormGroup>
-                            {!edit &&
-
-                                <FormGroup>
-                                    <Col smOffset={2} sm={10}>
-                                        <Button type="submit" disabled={edit}>
-                                            Save
+                            <Col sm={10}>
+                                <FormControl componentClass="textarea" placeholder="textarea" disabled={edit} value={project.description} onChange={(e) => { this.setState({ project: Object.assign({}, project, { description: e.target.value }) }) } } />
+                            </Col>
+                        </FormGroup>
+                        {!edit && !create &&
+                            <FormGroup>
+                                <Col smOffset={2} sm={10}>
+                                    <Button type="submit" disabled={edit}>
+                                        Save
                                     </Button>
-                                        <Button onClick={this.handleDelete} disabled={edit}>
-                                            Delete
+                                    <Button onClick={this.handleDelete} disabled={edit}>
+                                        Delete
                                     </Button>
-                                    </Col>
-                                </FormGroup>
-                            }
-                        </Form>
-                    </Panel>
-                ) : (
-                        <div></div>
-                    )}
+                                </Col>
+                            </FormGroup>
+                        }
+                        {create &&
+                            <FormGroup>
+                                <Col smOffset={2} sm={10}>
+                                    <Button type="submit" disabled={edit}>
+                                        create
+                                        </Button>
+                                </Col>
+                            </FormGroup>
+
+                        }
+                    </Form>
+                </Panel>
             </div>
         );
     }

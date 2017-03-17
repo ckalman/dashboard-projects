@@ -97,6 +97,14 @@ ProjectStore.dispatchToken = AppDispatcher.register(action => {
             alert(action.message);
             ProjectStore.emitChange();
             break;
+        case ProjectConstants.PROJECT_NEW:
+            setProject(action.project);
+            ProjectStore.emitChange();
+            break;
+        case ProjectConstants.PROJECT_NEW_ERROR:
+            alert(action.message);
+            ProjectStore.emitChange();
+            break;
         default:
     }
 });

@@ -20,23 +20,23 @@ export default {
                 });
         });
     },
-    create:(apiUrl, user) => {
-      return new Promise((resolve, reject) => {
-        request
-          .post(apiUrl)
-          .set('x-access-token', AuthStore.getToken())
-          .send(user)
-          .end((err, response) => {
-            if (err) {
-              console.error("Create a user : ", err);
-              reject(response.body.message);
-            }
-            if (response != undefined) {
-              resolve(response.body);
-            } else {
-              reject("Error when retrive all users. Please check your connection or the backend server.");
-            }
-          });
-      });
+    create: (apiUrl, user) => {
+        return new Promise((resolve, reject) => {
+            request
+                .post(apiUrl)
+                .set('x-access-token', AuthStore.getToken())
+                .send(user)
+                .end((err, response) => {
+                    if (err) {
+                        console.error("Create a user : ", err);
+                        reject(response.body.message);
+                    }
+                    if (response != undefined) {
+                        resolve(response.body);
+                    } else {
+                        reject("Error when retrive all users. Please check your connection or the backend server.");
+                    }
+                });
+        });
     }
 }

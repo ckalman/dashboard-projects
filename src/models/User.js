@@ -22,16 +22,19 @@ export default class User {
         }
     }
 
-    static constructAll(usersData){
+    static constructAll(usersData) {
         var temp = [];
-        usersData.forEach(function(user) {
+        usersData.forEach(function (user) {
             temp.push(new Project(user));
         });
         return temp;
     }
 
-    isAdmin(){
-      console.log(this.role == roles.admin);
+    isAdmin() {
         return this.role == roles.admin;
+    }
+
+    isOwner(id) {
+        return this.id == id;
     }
 }

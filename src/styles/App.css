@@ -30,5 +30,8 @@ body {
   display: inline-flex;
   width: 100%;
 }
+.center{
+  text-align: center;
+}
 
 td { cursor: pointer; }

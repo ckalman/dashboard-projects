@@ -80,39 +80,58 @@ export default {
         });
     },
     remove: (apiUrl, id) => {
-      return new Promise((resolve, reject) => {
-        request
-          .del(apiUrl)
-          .send({id})
-          .end((err, response) => {
-            if (err) {
-              console.error("Remove project : ", err);
-              reject(response.body.message);
-            }
-            if (response != undefined) {
-              resolve(response.body);
-            } else {
-              reject("Error when removing project.");
-            }
-          });
-      });
+        return new Promise((resolve, reject) => {
+            request
+                .del(apiUrl)
+                .send({ id })
+                .end((err, response) => {
+                    if (err) {
+                        console.error("Remove project : ", err);
+                        reject(response.body.message);
+                    }
+                    if (response != undefined) {
+                        resolve(response.body);
+                    } else {
+                        reject("Error when removing project.");
+                    }
+                });
+        });
     },
     remove_all: (apiUrl) => {
-      return new Promise((resolve, reject) => {
-        request
-          .del(apiUrl)
-          .set('x-access-token', AuthStore.getToken())
-          .end((err, response) => {
-            if (err) {
-              console.error("Remove all projects : ", err);
-              reject(response.body.message);
-            }
-            if (response != undefined) {
-              resolve(response.body);
-            } else {
-              reject("Error when removing all projects.");
-            }
-          });
-      });
+        return new Promise((resolve, reject) => {
+            request
+                .del(apiUrl)
+                .set('x-access-token', AuthStore.getToken())
+                .end((err, response) => {
+                    if (err) {
+                        console.error("Remove all projects : ", err);
+                        reject(response.body.message);
+                    }
+                    if (response != undefined) {
+                        resolve(response.body);
+                    } else {
+                        reject("Error when removing all projects.");
+                    }
+                });
+        });
     },
+    create: (apiUrl, project) => {
+        return new Promise((resolve, reject) => {
+            request
+                .post(apiUrl)
+                .set('x-access-token', AuthStore.getToken())
+                .send(project)
+                .end((err, response) => {
+                    if (err) {
+                        console.error("Create a project : ", err);
+                        reject(response.body.message);
+                    }
+                    if (response != undefined) {
+                        resolve(response.body);
+                    } else {
+                        reject("Error when creating new project.");
+                    }
+                });
+        });
+    }
 }

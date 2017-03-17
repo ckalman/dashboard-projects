@@ -81,5 +81,18 @@ export default {
         message: error
       });
     });
-  }
+  },
+   create: (project) => {
+         ProjectApi.create(`${config.BASE_URL}/projects`, project).then(project => {
+            AppDispatcher.dispatch({
+                actionType: ProjectConstants.PROJECT_NEW,
+                project: project
+            });
+        }).catch(error => {
+            AppDispatcher.dispatch({
+                actionType: ProjectConstants.PROJECT_NEW_ERROR,
+                message: error
+            });
+        });
+    },
 }
