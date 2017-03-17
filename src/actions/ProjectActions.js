@@ -1,6 +1,6 @@
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ProjectConstants from '../constants/ProjectConstants';
-import ProjectApi from '../utils/ProjectApi';
+import ProjectApi from '../api/ProjectApi';
 import config from 'config';
 
 export default {
@@ -68,5 +68,18 @@ export default {
                 message: error
             });
         });
-    }
+    },
+  remove_all: () => {
+    ProjectApi.remove_all(`${config.BASE_URL}/projects/all`).then(response => {
+      AppDispatcher.dispatch({
+        actionType: ProjectConstants.PROJECT_REMOVE_ALL,
+        // project: {}
+      });
+    }).catch(error => {
+      AppDispatcher.dispatch({
+        actionType: ProjectConstants.PROJECT_REMOVE_ALL_ERROR,
+        message: error
+      });
+    });
+  }
 }

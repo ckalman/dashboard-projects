@@ -48,6 +48,7 @@ UserStore.dispatchToken = AppDispatcher.register(action => {
     switch (action.actionType) {
         case UserConstants.USER:
             setUser(action.user);
+            alert(action.message);
             UserStore.emitChange();
             break
         case UserConstants.USER_ERROR:

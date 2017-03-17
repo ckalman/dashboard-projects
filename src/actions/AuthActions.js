@@ -1,6 +1,6 @@
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import AuthConstants from '../constants/AuthConstants';
-import AuthApi from '../utils/AuthApi';
+import AuthApi from '../api/AuthApi';
 import config from 'config';
 
 export default {

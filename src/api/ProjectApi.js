@@ -1,4 +1,5 @@
 import request from 'superagent/lib/client';
+import AuthStore from '../stores/AuthStore';
 
 export default {
 
@@ -79,21 +80,39 @@ export default {
         });
     },
     remove: (apiUrl, id) => {
-        return new Promise((resolve, reject) => {
-            request
-                .del(apiUrl)
-                .send({id})
-                .end((err, response) => {
-                    if (err) {
-                        console.error("Remove project : ", err);
-                        reject(response.body.message);
-                    }
-                    if (response != undefined) {
-                        resolve(response.body);
-                    } else {
-                        reject("Error when remove project.");
-                    }
-                });
-        });
+      return new Promise((resolve, reject) => {
+        request
+          .del(apiUrl)
+          .send({id})
+          .end((err, response) => {
+            if (err) {
+              console.error("Remove project : ", err);
+              reject(response.body.message);
+            }
+            if (response != undefined) {
+              resolve(response.body);
+            } else {
+              reject("Error when removing project.");
+            }
+          });
+      });
+    },
+    remove_all: (apiUrl) => {
+      return new Promise((resolve, reject) => {
+        request
+          .del(apiUrl)
+          .set('x-access-token', AuthStore.getToken())
+          .end((err, response) => {
+            if (err) {
+              console.error("Remove all projects : ", err);
+              reject(response.body.message);
+            }
+            if (response != undefined) {
+              resolve(response.body);
+            } else {
+              reject("Error when removing all projects.");
+            }
+          });
+      });
     },
 }

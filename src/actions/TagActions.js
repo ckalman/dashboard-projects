@@ -1,6 +1,6 @@
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import TagConstant from '../constants/TagConstants';
-import TagApi from '../utils/TagApi';
+import TagApi from '../api/TagApi';
 import config from 'config';
 
 export default {

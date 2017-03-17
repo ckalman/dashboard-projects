@@ -1,6 +1,6 @@
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import UserConstants from '../constants/UserConstants';
-import UserApi from '../utils/UserApi';
+import UserApi from '../api/UserApi';
 import config from 'config';
 
 export default {
@@ -29,5 +29,5 @@ export default {
         message: error
       });
     });
-  },
+  }
 }

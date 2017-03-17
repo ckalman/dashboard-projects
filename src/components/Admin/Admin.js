@@ -40,9 +40,8 @@ class AdminComponent extends Component {
 
   }
 
-  // TODO : Create delete all method in projects
   deleteAllProjects() {
-    ProjectActions.all();
+    ProjectActions.remove_all();
   }
 
 
@@ -137,6 +136,12 @@ class AdminComponent extends Component {
               </Col>
             </FormGroup>
           </Form>
+        </Panel>
+
+        <Panel header="Admin utils">
+          <Button onClick={this.deleteAllProjects}>
+            Delete all projects
+          </Button>
         </Panel>
       </div>
     );
