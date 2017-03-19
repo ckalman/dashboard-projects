@@ -9,7 +9,7 @@ export default class {
     }
 
     project = {};
-    validity = [];
+    validity = {};
 
     constructor(project) {
         this.project = project;
@@ -54,8 +54,10 @@ export default class {
     
     isValid(){
         var result = true;
-        this.validity.forEach((isValid) => {
-            if(!isValid){
+        var temp = this.validity;
+        // Convert Object to array
+        var arr = Object.keys(temp).forEach((key) => {
+            if(!temp[key]){
                 result = false;
             }
         });

@@ -142,6 +142,11 @@ class FormProjectComponent extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
+        console.log(FormProjectComponent.validator.isValid());
+        if(!FormProjectComponent.validator.isValid()){
+            alert("Please check the form.");
+            return ;
+        }
         this.state.project.tags = this.getTagsFromCheckBox(this.state.tagsCheckBox);
         if (this.state.create) {
             if(!this.state.project.projectManager){
@@ -175,13 +180,12 @@ class FormProjectComponent extends Component {
 
     render() {
         const { project, users, tags, tagsCheckBox, edit, create } = this.state;
-        var validator = FormProjectComponent.validator;
-        validator = new FormValidator(project);
+        FormProjectComponent.validator = new FormValidator(project);
         return (
             <div>
                 <Panel header={`Project : ${project.title}`}>
                     <Form onSubmit={(e) => { this.handleSubmit(e); } } horizontal>
-                        <FormGroup controlId="formTitle" validationState={validator.getState('title')} >
+                        <FormGroup controlId="formTitle" validationState={FormProjectComponent.validator.getState('title')} >
                             <Col componentClass={ControlLabel} sm={2}>
                                 Title
                                 </Col>
@@ -190,7 +194,7 @@ class FormProjectComponent extends Component {
                             </Col>
                         </FormGroup>
 
-                        <FormGroup controlId="formTitle" validationState={validator.getState('status')}>
+                        <FormGroup controlId="formTitle" validationState={FormProjectComponent.validator.getState('status')}>
                             <Col componentClass={ControlLabel} sm={2}>
                                 Status
                                 </Col>
@@ -201,7 +205,7 @@ class FormProjectComponent extends Component {
                             </Col>
                         </FormGroup>
 
-                        <FormGroup controlId="formDeadline" validationState={validator.getState('deadline')}>
+                        <FormGroup controlId="formDeadline" validationState={FormProjectComponent.validator.getState('deadline')}>
                             <Col componentClass={ControlLabel} sm={2}>
                                 Deadline
                                 </Col>
@@ -235,7 +239,7 @@ class FormProjectComponent extends Component {
                             </Col>
                         </FormGroup>
 
-                        <FormGroup controlId="formDescription" validationState={validator.getState('description')}>
+                        <FormGroup controlId="formDescription" validationState={FormProjectComponent.validator.getState('description')}>
                             <Col componentClass={ControlLabel} sm={2}>
                                 Description
                                 </Col>
