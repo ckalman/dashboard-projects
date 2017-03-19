@@ -21,6 +21,8 @@ class FormProjectComponent extends Component {
         router: React.PropTypes.object.isRequired
     };
 
+    static validator = {};
+
     constructor() {
         super();
         this.state = {
@@ -70,10 +72,11 @@ class FormProjectComponent extends Component {
             edit: !edit
         });
 
-        if (!this.tagsLoaded && TagStore.getTags().length > 0) {
+        if (!this.tagsLoaded && TagStore.getTags().length > 0 && ProjectStore.getProject().tags) {
             this.tagsLoaded = true;
             this.setState({ tagsCheckBox: this.loadCheckbox(ProjectStore.getProject(), TagStore.getTags()) });
         }
+
         // Redirection
         if(this.state.create && this.state.project.id){
             window.location = '/project/' + this.state.project.id;
@@ -172,7 +175,8 @@ class FormProjectComponent extends Component {
 
     render() {
         const { project, users, tags, tagsCheckBox, edit, create } = this.state;
-        const validator = new FormValidator(project);
+        var validator = FormProjectComponent.validator;
+        validator = new FormValidator(project);
         return (
             <div>
                 <Panel header={`Project : ${project.title}`}>
