@@ -35,6 +35,7 @@ class FormProjectComponent extends Component {
         this.tagsLoaded = false;
         this.onChange = this.onChange.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     componentWillMount() {
@@ -63,6 +64,9 @@ class FormProjectComponent extends Component {
         
         if(!edit && project.projectManager){
            edit =  user.isOwner(project.projectManager.id);
+        }
+        if(this.state.create && AuthStore.isAuthenticated()){
+            edit = true;
         }
 
         this.setState({
@@ -147,6 +151,7 @@ class FormProjectComponent extends Component {
             alert("Please check the form.");
             return ;
         }
+
         this.state.project.tags = this.getTagsFromCheckBox(this.state.tagsCheckBox);
         if (this.state.create) {
             if(!this.state.project.projectManager){
@@ -156,7 +161,6 @@ class FormProjectComponent extends Component {
         } else {
             ProjectActions.update(this.state.project);
         }
-
     }
 
     handleDelete() {
@@ -214,7 +218,7 @@ class FormProjectComponent extends Component {
                             </Col>
                         </FormGroup>
 
-                        <FormGroup controlId="formControlsSelect">
+                        <FormGroup controlId="formControlsSelect" validationState={FormProjectComponent.validator.getState('projectManager')}>
                             <Col componentClass={ControlLabel} sm={2}>
                                 <ControlLabel>Project Manager</ControlLabel>
                             </Col>
@@ -262,9 +266,9 @@ class FormProjectComponent extends Component {
                         {create &&
                             <FormGroup>
                                 <Col smOffset={2} sm={10}>
-                                    <Button type="submit" disabled={edit}>
-                                        create
-                                        </Button>
+                                    <Button type="submit" onClick={this.handleSubmit} disabled={edit}>
+                                        Create
+                                    </Button>
                                 </Col>
                             </FormGroup>
 

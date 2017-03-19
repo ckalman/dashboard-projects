@@ -1,4 +1,5 @@
 import Status from '../constants/StatusConstants';
+import Auth from '../stores/AuthStore';
 import moment from 'moment';
 export default class {
 
@@ -9,7 +10,13 @@ export default class {
     }
 
     project = {};
-    validity = {};
+    validity = {
+        title: false,
+        status: false,
+        deadline: false,
+        description: false,
+        projectManager: false,
+    };
 
     constructor(project) {
         this.project = project;
@@ -28,7 +35,10 @@ export default class {
                 result = this.checkDate(value);
             }else if (inputName == 'description'){
                 result = true;
+            }else if (inputName == 'projectManager'){
+                result = this.checkProjectManger(value);
             }
+
             if(inputName){
                 this.validity[inputName] = result;
             }
@@ -51,16 +61,27 @@ export default class {
     checkDate(input){
         return moment(input).isValid();
     }
+
+    checkProjectManger(input){
+        if(input){
+            if(Auth.getUser().isAdmin()){
+                return true;
+            }
+            return input.id == Auth.getUser().id;
+        } 
+        return false;
+    }
     
     isValid(){
         var result = true;
         var temp = this.validity;
         // Convert Object to array
-        var arr = Object.keys(temp).forEach((key) => {
+        Object.keys(temp).forEach((key) => {
             if(!temp[key]){
                 result = false;
             }
         });
+        if(Object.keys(temp).length <= 0) return false;
         return result;
     }
 
