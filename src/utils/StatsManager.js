@@ -4,12 +4,13 @@ import TagStore from '../stores/TagStore';
 
 export default class StatsManager {
 
-  tagsStats(projects) {
-    var map = new Object();
+  static tagsStats(projects) {
+    var map = new Map();
     TagStore.getTags().forEach(function(tag){
-
+      map.set(tag, Project.projectsByTag(projects,tag));
     });
-    return user.id == this.projectManager.id;
+    return map;
   }
 
 }
+

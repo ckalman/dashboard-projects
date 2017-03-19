@@ -29,10 +29,18 @@ export default class Project {
         }
     }
 
+    static projectsByTag(projects, tag){
+      var nb = 0;
+      projects.forEach(function(project){
+        if (project.tags.includes(tag)){nb++;}
+      })
+      return nb;
+    }
+
     static constructAll(projectsData){
         var temp = [];
         projectsData.forEach(function(project) {
-            temp.push(new Project(project));            
+            temp.push(new Project(project));
         });
         return temp;
     }

@@ -1,36 +1,43 @@
 import React, { Component } from 'react';
-import moment from 'moment'
-import { Panel, Col, Table, FormControl, Button } from 'react-bootstrap';
+import ProjectStore from '../../stores/ProjectStore';
+import ProjectActions from '../../actions/ProjectActions';
+import TagActions from '../../actions/TagActions';
+import Stats from '../../utils/StatsManager'
 
 class Statistics extends Component {
 
-    static contextTypes = {
-        router: React.PropTypes.object.isRequired
-    }
+  static contextTypes = {
+    router: React.PropTypes.object.isRequired
+  }
 
-    constructor() {
-        super();
-        this.state = {
-            context: 'title'
-        }
-        this.onChange = this.onChange.bind(this);
+  constructor() {
+    super();
+    this.state = {
+      tags:null
     }
+    this.onChange = this.onChange.bind(this);
+  }
 
     componentWillMount() {
+      TagActions.all();
+      ProjectActions.all();
+      this.setState({tags : Stats.tagsStats(ProjectStore.getProjects())});
     }
 
     componentWillUnmount() {
+
     }
 
     onChange() {
+
     }
 
-    render() {
-        return (
-            <div>
 
-            </div>
-        );
+    render() {
+      return (
+        <div>
+        </div>
+      );
     }
 }
 

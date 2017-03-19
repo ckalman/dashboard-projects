@@ -73,7 +73,7 @@ export default {
     ProjectApi.remove_all(`${config.BASE_URL}/projects/all`).then(response => {
       AppDispatcher.dispatch({
         actionType: ProjectConstants.PROJECT_REMOVE_ALL,
-        // project: {}
+        project: {}
       });
     }).catch(error => {
       AppDispatcher.dispatch({
