@@ -94,9 +94,12 @@ class FormProjectComponent extends Component {
         var all = _.union(project, tags);
         all.map((tag) => {
             var checked = false;
-            project.tags.forEach((t) => {
-                if (t == tag) checked = true;
-            });
+            if(project.tags){
+                project.tags.forEach((t) => {
+                    if (t == tag) checked = true;
+                });
+            }
+           
             temp.push(new CheckBoxModel({
                 name: tag,
                 value: tag,
@@ -155,11 +158,13 @@ class FormProjectComponent extends Component {
 
     getTagsFromCheckBox(checkbox) {
         var temp = [];
-        checkbox.forEach((c) => {
-            if (c.isChecked()) {
-                temp.push(c.name);
-            }
-        });
+        if(checkbox){
+            checkbox.forEach((c) => {
+                if (c.isChecked()) {
+                    temp.push(c.name);
+                }
+            });
+        }
         return temp;
     }
 
