@@ -23,22 +23,35 @@ function setSearch(search){
     _search = search;
 }
 
+/**
+ * Reset the search criteria
+ */
 function resetSearch(){
     if(_search) _projects = _allProject;
     _search = false;
 }
 
+/**
+ * Call the filter method
+ * @param search
+ */
 function filterSearch(search){
+    // Save all projects inside the variable _allProject which is used to filter the projects and is always fulfilled
     if(!_search || _allProject.length <= 0) _allProject = _projects;
 
     if(Object.keys(search).length == 0){
         _projects = _allProject;
-    }else{
+    } else {
         _search = true;
         _projects = filterLogic(search);
     }
 }
 
+/**
+ * Filter the project lists with a criteria
+ * @param search
+ * @returns {Array}
+ */
 function filterLogic(search){
     var results = [];
     _allProject.forEach((project) => {
