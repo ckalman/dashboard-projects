@@ -217,6 +217,15 @@ class FormProjectComponent extends Component {
                             </Col>
                         </FormGroup>
 
+                        <FormGroup controlId="nbWorker" validationState={FormProjectComponent.validator.getState('nbWorker')}>
+                            <Col componentClass={ControlLabel} sm={2}>
+                                Number of worker
+                                </Col>
+                            <Col sm={10}>
+                                <FormControl type="number" min="0" value={project.nbWorker} disabled={edit} onChange={(e) => { this.setState({ project: Object.assign({}, project, { nbWorker: e.target.value }) }) } } />
+                            </Col>
+                        </FormGroup>
+
                         <FormGroup controlId="formControlsSelect" validationState={FormProjectComponent.validator.getState('projectManager')}>
                             <Col componentClass={ControlLabel} sm={2}>
                                 <ControlLabel>Project Manager</ControlLabel>

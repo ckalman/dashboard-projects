@@ -16,6 +16,7 @@ export default class {
         deadline: false,
         description: false,
         projectManager: false,
+        nbWorker: false,
     };
 
     constructor(project) {
@@ -37,6 +38,8 @@ export default class {
                 result = true;
             }else if (inputName == 'projectManager'){
                 result = this.checkProjectManger(value);
+            }else if (inputName == 'nbWorker'){
+                result = value > 0;
             }
 
             if(inputName){
