@@ -15,4 +15,6 @@ export default keyMirror({
   PROJECT_REMOVE_ALL_ERROR: null,
   PROJECT_NEW: null,
   PROJECT_NEW_ERROR: null,
+  PROJECT_FILTER: null,
+  PROJECT_FILTER_RESET: null,
 });

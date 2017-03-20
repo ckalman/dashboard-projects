@@ -44,7 +44,7 @@ export default {
         });
     },
     update: (project) => {
-         ProjectApi.update(`${config.BASE_URL}/projects`, project).then(project => {
+        ProjectApi.update(`${config.BASE_URL}/projects`, project).then(project => {
             AppDispatcher.dispatch({
                 actionType: ProjectConstants.PROJECT_UPDATE,
                 project: project
@@ -69,21 +69,21 @@ export default {
             });
         });
     },
-  remove_all: () => {
-    ProjectApi.remove_all(`${config.BASE_URL}/projects/all`).then(response => {
-      AppDispatcher.dispatch({
-        actionType: ProjectConstants.PROJECT_REMOVE_ALL,
-        project: {}
-      });
-    }).catch(error => {
-      AppDispatcher.dispatch({
-        actionType: ProjectConstants.PROJECT_REMOVE_ALL_ERROR,
-        message: error
-      });
-    });
-  },
-   create: (project) => {
-         ProjectApi.create(`${config.BASE_URL}/projects`, project).then(project => {
+    remove_all: () => {
+        ProjectApi.remove_all(`${config.BASE_URL}/projects/all`).then(response => {
+            AppDispatcher.dispatch({
+                actionType: ProjectConstants.PROJECT_REMOVE_ALL,
+                project: {}
+            });
+        }).catch(error => {
+            AppDispatcher.dispatch({
+                actionType: ProjectConstants.PROJECT_REMOVE_ALL_ERROR,
+                message: error
+            });
+        });
+    },
+    create: (project) => {
+        ProjectApi.create(`${config.BASE_URL}/projects`, project).then(project => {
             AppDispatcher.dispatch({
                 actionType: ProjectConstants.PROJECT_NEW,
                 project: project
@@ -95,4 +95,15 @@ export default {
             });
         });
     },
+    filter: (data) => {
+        AppDispatcher.dispatch({
+                actionType: ProjectConstants.PROJECT_FILTER,
+                filter: data
+        });
+    },
+    resetfilter: () => {
+        AppDispatcher.dispatch({
+                actionType: ProjectConstants.PROJECT_FILTER_RESET
+        });
+    }
 }

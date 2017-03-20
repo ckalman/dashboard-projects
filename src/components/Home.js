@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Panel, Col, Table, FormControl, Button } from 'react-bootstrap';
 import ProjectsTables from './Projects/ProjectsTables';
 import Statistics from './Projects/Statistics';
+import ProjectFilter from './Filters/ProjectFilter';
 
 class HomeComponent extends Component {
 
@@ -11,6 +12,9 @@ class HomeComponent extends Component {
   render() {
     return (
       <div>
+      <Col xs={12} md={12}>
+        <ProjectFilter />
+      </Col>
         <Col xs={12} md={7}>
           <ProjectsTables />
         </Col>

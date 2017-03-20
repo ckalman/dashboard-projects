@@ -146,7 +146,6 @@ class FormProjectComponent extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        console.log(FormProjectComponent.validator.isValid());
         if(!FormProjectComponent.validator.isValid()){
             alert("Please check the form.");
             return ;

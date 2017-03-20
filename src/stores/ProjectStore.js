@@ -2,11 +2,14 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import ProjectConstants from '../constants/ProjectConstants';
 import Project from '../models/Project';
 import { EventEmitter } from 'events';
+import moment from 'moment';
 
 const CHANGE_EVENT = 'change';
 
 let _project = {};
 let _projects = [];
+let _allProject = [];
+let _search = false;
 
 function setProject(project) {
     _project = project;
@@ -14,6 +17,57 @@ function setProject(project) {
 
 function setProjects(projects) {
     _projects = projects;
+}
+
+function setSearch(search){
+    _search = search;
+}
+
+function resetSearch(){
+    if(_search) _projects = _allProject;
+    _search = false;
+}
+
+function filterSearch(search){
+    if(!_search || _allProject.length <= 0) _allProject = _projects;
+    
+    if(Object.keys(search).length == 0){        
+        _projects = _allProject;
+    }else{
+        _search = true;
+        _projects = filterLogic(search);   
+    }
+}
+
+function filterLogic(search){
+    var results = [];    
+    _allProject.forEach((project) => {
+        var found = false;
+        if(project.status == search.status){
+            found = true;
+        }else if(project.tags.includes(search.tag)){
+            found = true;
+        }
+
+        if(!search.start_at || !search.end_at){ // dans le cas ou il y a l'un ou l'autre
+            if(search.start_at && moment(project.deadline).valueOf() >= moment(search.start_at).valueOf()){
+                found = true;
+            }
+
+            if(search.end_at && moment(search.end_at).valueOf() >= moment(project.deadline).valueOf()){
+                found = true;
+            }
+        }
+        if(search.start_at && search.end_at){
+            if(moment(search.start_at).valueOf() <= moment(project.deadline).valueOf() && moment(search.end_at).valueOf() >= moment(project.deadline).valueOf()){
+                found = true;
+            }
+        }
+        
+
+        if(found) results.push(project);
+    });
+    return results;
 }
 
 class ProjectStoreClass extends EventEmitter {
@@ -39,6 +93,7 @@ class ProjectStoreClass extends EventEmitter {
     }
 
 }
+
 
 const ProjectStore = new ProjectStoreClass();
 
@@ -88,7 +143,7 @@ ProjectStore.dispatchToken = AppDispatcher.register(action => {
             alert(action.message);
             ProjectStore.emitChange();
             break;
-        case ProjectConstants.PROJECT_ALL_REMOVE:
+        case ProjectConstants.PROJECT_REMOVE_ALL:
             alert("All projects successfully deleted");
             setProject({});
             ProjectStore.emitChange();
@@ -103,6 +158,15 @@ ProjectStore.dispatchToken = AppDispatcher.register(action => {
             break;
         case ProjectConstants.PROJECT_NEW_ERROR:
             alert(action.message);
+            ProjectStore.emitChange();
+            break;
+        case ProjectConstants.PROJECT_FILTER:
+            console.log("filter en cours : ", action.filter);
+            filterSearch(action.filter);
+            ProjectStore.emitChange();
+            break;
+        case ProjectConstants.PROJECT_FILTER_RESET:
+            resetSearch();
             ProjectStore.emitChange();
             break;
         default:

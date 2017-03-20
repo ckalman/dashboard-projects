@@ -41,7 +41,9 @@ class AdminComponent extends Component {
   }
 
   deleteAllProjects() {
-    ProjectActions.remove_all();
+    if(confirm("Are you sure you want to delete all project ?")){
+      ProjectActions.remove_all();
+    }    
   }
 
 
