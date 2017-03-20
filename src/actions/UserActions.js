@@ -23,10 +23,10 @@ export default {
         actionType: UserConstants.USER,
         user: user
       });
-    }).catch(error => {
+    }).catch((error) => {
       AppDispatcher.dispatch({
         actionType: UserConstants.USER_ERROR,
-        message: error
+        message: "Le nom d'utilisateur existe déjà"
       });
     });
   }
