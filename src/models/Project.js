@@ -37,14 +37,6 @@ export default class Project {
       return nb;
     }
 
-    static projectsByStatus(projects, status){
-      var nb = 0;
-      projects.forEach(function(project){
-        if (project.status == status){nb++;}
-      })
-      return nb;
-    }
-
     static constructAll(projectsData){
         var temp = [];
         projectsData.forEach(function(project) {

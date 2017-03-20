@@ -39,6 +39,7 @@ class Statistics extends Component {
     this.chargeData = this.chargeData.bind(this);
     this.chargeTags = this.chargeTags.bind(this);
     this.chargeStatus = this.chargeStatus.bind(this);
+    this.chargeManager = this.chargeManager.bind(this);
   }
 
     componentWillMount() {
@@ -63,11 +64,20 @@ class Statistics extends Component {
         this.chargeTags()
       } else if (e == "status") {
         this.chargeStatus()
+      } else if (e == "Project manager") {
+        this.chargeManager()
       } else {
         this.setState({data:[]});
       }
     }
 
+    chargeManager(){
+      var chartData= [];
+      Stats.projectManagerStats(ProjectStore.getProjects()).forEach(function(value, key, map){
+        if (value != 0){chartData.push({name: key, number: value});}
+      });
+      this.setState({data:chartData});
+    }
 
     chargeTags(){
       var chartData= [];
@@ -93,6 +103,7 @@ class Statistics extends Component {
             <option value="">Pick your stat option</option>
             <option value="tags">Tags</option>
             <option value="status">Status</option>
+            <option value="Project manager">Project manager</option>
           </FormControl>
           <Pie data={this.state.data} options={this.state.option} accessorKey="number" />
         </div>
