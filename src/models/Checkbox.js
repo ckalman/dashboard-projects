@@ -1,3 +1,9 @@
+/**
+ * 
+ * 
+ * @export
+ * @class CheckBox
+ */
 export default class CheckBox {
     
     name = '';

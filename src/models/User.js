@@ -1,5 +1,11 @@
 import roles from '../constants/RolesConstants';
 
+/**
+ * Represents a user.
+ * 
+ * @export
+ * @class User
+ */
 export default class User {
 
     id = null;
@@ -22,6 +28,15 @@ export default class User {
         }
     }
 
+    /**
+     * Build all User instancies from array.
+     * 
+     * @static
+     * @param {Array} usersData
+     * @returns
+     * 
+     * @memberOf User
+     */
     static constructAll(usersData) {
         var temp = [];
         usersData.forEach(function (user) {
@@ -30,10 +45,24 @@ export default class User {
         return temp;
     }
 
+    /**
+     * Determinate if the user is an administrator 
+     * 
+     * @returns true if it is
+     * 
+     * @memberOf User
+     */
     isAdmin() {
         return this.role == roles.admin;
     }
 
+    /**
+     * 
+     * @param {any} id project id
+     * @returns true if 
+     * 
+     * @memberOf User
+     */
     isOwner(id) {
         return this.id == id;
     }
