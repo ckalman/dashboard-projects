@@ -30,17 +30,17 @@ function resetSearch(){
 
 function filterSearch(search){
     if(!_search || _allProject.length <= 0) _allProject = _projects;
-    
-    if(Object.keys(search).length == 0){        
+
+    if(Object.keys(search).length == 0){
         _projects = _allProject;
     }else{
         _search = true;
-        _projects = filterLogic(search);   
+        _projects = filterLogic(search);
     }
 }
 
 function filterLogic(search){
-    var results = [];    
+    var results = [];
     _allProject.forEach((project) => {
         var found = false;
         if(project.status == search.status){
@@ -63,7 +63,7 @@ function filterLogic(search){
                 found = true;
             }
         }
-        
+
 
         if(found) results.push(project);
     });
@@ -161,7 +161,6 @@ ProjectStore.dispatchToken = AppDispatcher.register(action => {
             ProjectStore.emitChange();
             break;
         case ProjectConstants.PROJECT_FILTER:
-            console.log("filter en cours : ", action.filter);
             filterSearch(action.filter);
             ProjectStore.emitChange();
             break;

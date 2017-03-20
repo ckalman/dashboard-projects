@@ -1,17 +1,11 @@
 import React, { Component } from 'react';
 import ProjectStore from '../../stores/ProjectStore';
 import ProjectActions from '../../actions/ProjectActions';
-import TagActions from '../../actions/TagActions';
-import TagStore from '../../stores/TagStore';
 import Stats from '../../utils/StatsManager';
-import {Pie,Bar, SmoothLine,StockLine,Scatterplot,Tree,Radar} from 'react-pathjs-chart';
+import { Pie } from 'react-pathjs-chart';
 import { FormControl } from 'react-bootstrap';
 
 class Statistics extends Component {
-
-  static contextTypes = {
-    router: React.PropTypes.object.isRequired
-  }
 
   constructor() {
     super();
@@ -35,6 +29,7 @@ class Statistics extends Component {
       }
     };
 
+    // Bind functions
     this.onChange = this.onChange.bind(this);
     this.chargeData = this.chargeData.bind(this);
     this.chargeTags = this.chargeTags.bind(this);
@@ -43,35 +38,47 @@ class Statistics extends Component {
   }
 
     componentWillMount() {
+      // Charge all projects
       ProjectStore.addChangeListener(this.onChange);
-      TagStore.addChangeListener(this.onChange);
-
-      TagActions.all();
       ProjectActions.all();
     }
 
 
     componentWillUnmount() {
       ProjectStore.removeListener(this.onChange);
-      TagStore.removeListener(this.onChange);
     }
 
     onChange() {
+      // Charge the chart if the projects list is changed by search or filters
+      this.chargeData(this.state.stat);
     }
 
-    chargeData(e){
-      if (e == "tags"){
-        this.chargeTags()
-      } else if (e == "status") {
-        this.chargeStatus()
-      } else if (e == "Project manager") {
-        this.chargeManager()
-      } else {
-        this.setState({data:[]});
+  /**
+   * Charge the correct graph depending of the drop down list above
+   * @param chartType
+   */
+  chargeData(chartType){
+      this.setState({stat:chartType});
+
+      switch (chartType) {
+        case "tags":
+          this.chargeTags();
+          break;
+        case "status":
+          this.chargeStatus();
+          break;
+        case "Project manager":
+          this.chargeManager();
+          break;
+        default:
+          this.setState({data:[]});
       }
     }
 
-    chargeManager(){
+  /**
+   * Charge a chart with the project managers
+   */
+  chargeManager(){
       var chartData= [];
       Stats.projectManagerStats(ProjectStore.getProjects()).forEach(function(value, key, map){
         if (value != 0){chartData.push({name: key, number: value});}
@@ -79,7 +86,10 @@ class Statistics extends Component {
       this.setState({data:chartData});
     }
 
-    chargeTags(){
+  /**
+   * Charge a chart with the tags
+   */
+  chargeTags(){
       var chartData= [];
       Stats.tagsStats(ProjectStore.getProjects()).forEach(function(value, key, map){
         if (value != 0){chartData.push({name: key, number: value});}
@@ -87,7 +97,10 @@ class Statistics extends Component {
       this.setState({data:chartData});
     }
 
-    chargeStatus(){
+  /**
+   * Charge a chart with the status
+   */
+  chargeStatus(){
       var chartData= [];
       Stats.statusStats(ProjectStore.getProjects()).forEach(function(value, key, map){
         if (value != 0){chartData.push({name: key, number: value});}
