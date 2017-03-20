@@ -26,11 +26,6 @@ class Statistics extends Component {
         r: 100,
         R: 200,
         legendPosition: 'topLeft',
-        animate:{
-          type:'oneByOne',
-          duration:200,
-          fillTransition:3
-        },
         label:{
           fontFamily:'Arial',
           fontSize:14,
@@ -95,7 +90,7 @@ class Statistics extends Component {
       return (
         <div>
           <FormControl componentClass="select" placeholder="Chose the user role" onChange={(e) => { this.chargeData(e.target.value)}}>
-            <option value=""> </option>
+            <option value="">Pick your stat option</option>
             <option value="tags">Tags</option>
             <option value="status">Status</option>
           </FormControl>

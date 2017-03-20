@@ -19,9 +19,7 @@ class AdminComponent extends Component {
       confirmPassword:''
     }
     this.onChange = this.onChange.bind(this);
-    this.fieldValidation = this.fieldValidation.bind(this);
     this.passwordValidation = this.passwordValidation.bind(this);
-    this.fieldValidation = this.fieldValidation.bind(this);
     this.createUser = this.createUser.bind(this);
     this.deleteAllProjects = this.deleteAllProjects.bind(this);
   }
@@ -48,23 +46,41 @@ class AdminComponent extends Component {
 
 
   createUser() {
-    UserActions.create(this.state.user);
+    if (this.passwordValidation() == 'error'){
+      alert('Please correct the form')
+    } else {
+      UserActions.create(this.state.user);
+    }
   }
 
-  fieldValidation(){
-    const length = this.state.value.length;
-    if (length > 10) return 'success';
-    else if (length > 5) return 'warning';
-    else if (length > 0) return 'error';
-  }
+  // nameValidation(){
+  //   var firstnameLength = 0;
+  //   var lastnameLength = 0;
+  //   if (this.state.user.firstname){
+  //     firstnameLength = this.state.user.firstname.length;
+  //   }
+  //   if (this.state.user.lastname){
+  //     lastnameLength = this.state.user.lastname.length;
+  //   }
+  //   if (firstnameLength < 3 || lastnameLength < 3) return 'error';
+  // }
+  //
+  // userValidation(){
+  //   var firstnameLength = 0;
+  //   var lastnameLength = 0;
+  //   if (this.state.user.firstname){
+  //     firstnameLength = this.state.user.firstname.length;
+  //   }
+  //   if (this.state.user.lastname){
+  //     lastnameLength = this.state.user.lastname.length;
+  //   }
+  //   if (firstnameLength < 3 || lastnameLength < 3) return 'error';
+  // }
 
   passwordValidation(){
-    const length = this.state.value.length;
-    if (length > 10) return 'success';
-    else if (length > 5) return 'warning';
-    else if (length > 0) return 'error';
+    if (this.state.user.password == this.state.confirmPassword) return 'success';
+    else return 'error';
   }
-
 
   render() {
     var user = this.state.user;
@@ -72,7 +88,6 @@ class AdminComponent extends Component {
       <div>
         <Panel header="Create a new user">
           <Form horizontal>
-
             <FormGroup controlId="name">
               <Col componentClass={ControlLabel} sm={2}>
                 First name :
@@ -90,7 +105,7 @@ class AdminComponent extends Component {
 
             <FormGroup controlId="userInfo">
               <Col componentClass={ControlLabel} sm={2}>
-                Username : {user.username}
+                Username :
               </Col>
               <Col sm={2}>
                 <FormControl type="text" onChange={(e) => {this.setState({user: Object.assign({}, user, {username: e.target.value})})}} />
@@ -103,7 +118,7 @@ class AdminComponent extends Component {
               </Col>
             </FormGroup>
 
-            <FormGroup controlId="password">
+            <FormGroup controlId="password" validationState={this.passwordValidation()}>
               <Col componentClass={ControlLabel} sm={2}>
                 Password :
               </Col>
@@ -114,7 +129,7 @@ class AdminComponent extends Component {
                 Confirm password :
               </Col>
               <Col sm={2}>
-                <FormControl type="password" onChange={this.changeConfirmPassword} />
+                <FormControl type="password" onChange={(e) => {this.setState({confirmPassword: e.target.value})}} />
               </Col>
             </FormGroup>
 

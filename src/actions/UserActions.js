@@ -18,10 +18,10 @@ export default {
         });
     },
   create: (user) => {
-    UserApi.create(`${config.BASE_URL}/user`, user).then(user => {
+    UserApi.create(`${config.BASE_URL}/user`, user).then(message => {
       AppDispatcher.dispatch({
         actionType: UserConstants.USER,
-        user: user
+        message: message
       });
     }).catch((error) => {
       AppDispatcher.dispatch({
