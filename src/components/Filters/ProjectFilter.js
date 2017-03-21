@@ -18,12 +18,12 @@ class ProjectFiltersComponent extends Component {
         }
         this.onChange = this.onChange.bind(this);
         this.handleSearch = this.onChange.bind(this);
-        console.log("pouet");
     }
 
     componentWillMount() {
         ProjectStore.addChangeListener(this.onChange);
         TagStore.addChangeListener(this.onChange);
+        TagActions.all();
     }
 
     componentWillUnmount() {
