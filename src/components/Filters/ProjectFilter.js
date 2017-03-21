@@ -14,7 +14,7 @@ class ProjectFiltersComponent extends Component {
     constructor() {
         super();
         this.state = {
-            search: {}
+            search: {},
         }
         this.onChange = this.onChange.bind(this);
         this.handleSearch = this.onChange.bind(this);
@@ -37,10 +37,16 @@ class ProjectFiltersComponent extends Component {
         });
     }
 
+    resetFilters() {
+      this.setState({ search: { tag:'', status:'', start_at:'', end_at:''} }) ;
+      ProjectActions.resetfilter();
+    }
+
     handleSubmit(e) {
         e.preventDefault();
         ProjectActions.filter(this.state.search);
     }
+
 
     render() {
         var { search, tags } = this.state;
@@ -73,18 +79,19 @@ class ProjectFiltersComponent extends Component {
                             </Col>
                         </FormGroup>
 
+
                         <FormGroup controlId="date">
                             <Col componentClass={ControlLabel} sm={2}>
                                 Date de début :
                             </Col>
                             <Col sm={2}>
-                                <FormControl type="date" onChange={(e) => { this.setState({ search: Object.assign({}, search, { start_at: e.target.value }) }) } } />
+                                <FormControl type="date" value={this.state.search.start_at} onChange={(e) => { this.setState({ search: Object.assign({}, search, { start_at: e.target.value }) }) } } />
                             </Col>
                             <Col componentClass={ControlLabel} sm={2}>
                                 Date de fin :
                             </Col>
                             <Col sm={2}>
-                                <FormControl type="date" onChange={(e) => { this.setState({ search: Object.assign({}, search, { end_at: e.target.value }) }) } } />
+                                <FormControl type="date" value={this.state.search.end_at} onChange={(e) => { this.setState({ search: Object.assign({}, search, { end_at: e.target.value }) }) } }/>
                             </Col>
                         </FormGroup>
 
@@ -96,7 +103,7 @@ class ProjectFiltersComponent extends Component {
                             </Col>
                         </FormGroup>
                     </Form>
-                    <Button onClick={() => ProjectActions.resetfilter()}>Reset</Button>
+                    <Button onClick={() => { this.resetFilters(); } }>Reset</Button>
                 </Panel>
             </div >
         );

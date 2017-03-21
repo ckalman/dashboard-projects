@@ -55,30 +55,32 @@ function filterSearch(search){
 function filterLogic(search){
     var results = [];
     _allProject.forEach((project) => {
-        var found = false;
-        if(project.status == search.status){
-            found = true;
-        }else if(project.tags.includes(search.tag)){
-            found = true;
+        var match = true;
+        if(search.status && search.status != project.status){
+          match = false;
         }
 
-        if(!search.start_at || !search.end_at){ // dans le cas ou il y a l'un ou l'autre
-            if(search.start_at && moment(project.deadline).valueOf() >= moment(search.start_at).valueOf()){
-                found = true;
+        if(search.tag && !project.tags.includes(search.tag)){
+          match = false;
+        }
+
+        if(!search.start_at || !search.end_at){ // In case there is only one date 
+            if(search.start_at && !moment(project.deadline).valueOf() >= moment(search.start_at).valueOf()){
+              match = false;
             }
 
-            if(search.end_at && moment(search.end_at).valueOf() >= moment(project.deadline).valueOf()){
-                found = true;
+            if(search.end_at && !moment(search.end_at).valueOf() >= moment(project.deadline).valueOf()){
+              match = false;
             }
         }
+
         if(search.start_at && search.end_at){
-            if(moment(search.start_at).valueOf() <= moment(project.deadline).valueOf() && moment(search.end_at).valueOf() >= moment(project.deadline).valueOf()){
-                found = true;
+            if(!moment(search.start_at).valueOf() <= moment(project.deadline).valueOf() || !moment(search.end_at).valueOf() >= moment(project.deadline).valueOf()){
+              match = false;
             }
         }
 
-
-        if(found) results.push(project);
+        if(match) results.push(project);
     });
     return results;
 }
