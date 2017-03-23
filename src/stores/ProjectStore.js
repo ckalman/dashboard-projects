@@ -64,18 +64,18 @@ function filterLogic(search){
           match = false;
         }
 
-        if(!search.start_at || !search.end_at){ // In case there is only one date 
-            if(search.start_at && !moment(project.deadline).valueOf() >= moment(search.start_at).valueOf()){
+        if(!search.start_at || !search.end_at){ // In case there is only one date
+            if(search.start_at && moment(project.deadline).valueOf() < moment(search.start_at).valueOf()){
               match = false;
             }
 
-            if(search.end_at && !moment(search.end_at).valueOf() >= moment(project.deadline).valueOf()){
+            if(search.end_at && moment(project.deadline).valueOf() > moment(search.end_at).valueOf()){
               match = false;
             }
         }
 
         if(search.start_at && search.end_at){
-            if(!moment(search.start_at).valueOf() <= moment(project.deadline).valueOf() || !moment(search.end_at).valueOf() >= moment(project.deadline).valueOf()){
+            if(moment(search.start_at).valueOf() > moment(project.deadline).valueOf() || moment(search.end_at).valueOf() < moment(project.deadline).valueOf()){
               match = false;
             }
         }
