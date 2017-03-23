@@ -1,7 +1,6 @@
 import request from 'superagent/lib/client';
 
 export default {
-
   /**
    * Retrieve all tags used by any project
    * @param apiUrl

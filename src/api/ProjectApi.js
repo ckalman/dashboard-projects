@@ -5,7 +5,7 @@ export default {
 
   /**
    * Retrieve all projects
-    * @param apiUrl
+   * @param apiUrl
    * @returns {Promise}
    */
   all: (apiUrl) => {

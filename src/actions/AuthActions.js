@@ -6,7 +6,7 @@ import config from 'config';
 export default {
 
   /**
-   *
+   * Authenticate the given user
    * @param username
    * @param password
    */
@@ -25,7 +25,7 @@ export default {
   },
 
   /**
-   *
+   * Logout the user
    */
   deauthenticate: () => {
     AppDispatcher.dispatch({

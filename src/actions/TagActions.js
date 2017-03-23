@@ -6,7 +6,7 @@ import config from 'config';
 export default {
 
   /**
-   *
+   * Retrive all tags
    */
   all: () => {
         TagApi.all(`${config.BASE_URL}/tags`).then(tags => {

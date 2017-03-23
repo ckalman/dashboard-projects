@@ -16,6 +16,8 @@ Run the app.
 npm start
 ```
 
+Please install and run the fake backend before : https://github.com/ckalman/dashboard-project-server
+
 The app will be served at `localhost:8000`.
 
 ## License

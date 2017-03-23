@@ -6,7 +6,7 @@ import config from 'config';
 export default {
 
   /**
-   *
+   * Retrive all user
    */
   all: () => {
         UserApi.all(`${config.BASE_URL}/users`).then(users => {
@@ -23,7 +23,7 @@ export default {
     },
 
   /**
-   *
+   * Create the given user
    * @param user
    */
   create: (user) => {

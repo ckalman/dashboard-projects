@@ -5,7 +5,7 @@ import config from 'config';
 
 export default {
   /**
-   *
+   * Get all project
    */
     all: () => {
         ProjectApi.all(`${config.BASE_URL}/projects`).then(projects => {
@@ -22,9 +22,9 @@ export default {
     },
 
   /**
-   *
-   * @param type
-   * @param value
+   * Search for some specific data
+   * @param type Object attribute name
+   * @param value Search data
    */
     search: (type, value) => {
         ProjectApi.search(`${config.BASE_URL}/projects/filtered?filterType=${type}&value=${value}`).then(projects => {
@@ -41,7 +41,7 @@ export default {
     },
 
   /**
-   *
+   * Get one project by its id.
    * @param id
    */
     first: (id) => {
@@ -59,8 +59,8 @@ export default {
     },
 
   /**
-   *
-   * @param project
+   * Update the given project 
+   * @param project {Project}
    */
     update: (project) => {
         ProjectApi.update(`${config.BASE_URL}/projects`, project).then(project => {
@@ -77,7 +77,7 @@ export default {
     },
 
   /**
-   *
+   * Remove project by id
    * @param id
    */
     remove: (id) => {
@@ -95,7 +95,7 @@ export default {
     },
 
   /**
-   *
+   * Remove all
    */
   remove_all: () => {
         ProjectApi.remove_all(`${config.BASE_URL}/projects/all`).then(response => {
