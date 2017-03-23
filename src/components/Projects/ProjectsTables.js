@@ -5,8 +5,8 @@ import moment from 'moment'
 import { Panel, Col, Table, FormControl, Button } from 'react-bootstrap';
 
 /**
- * Display a list of project
- * 
+ * Display a list of projects
+ *
  * @class ProjectsComponent
  * @extends {Component}
  */
@@ -53,8 +53,8 @@ class ProjectsComponent extends Component {
 
     /**
      * Action when the user click on search
-     * 
-     * 
+     *
+     *
      * @memberOf ProjectsComponent
      */
     handleClickSearch() {

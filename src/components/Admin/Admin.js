@@ -38,13 +38,18 @@ class AdminComponent extends Component {
 
   }
 
+  /**
+   * Delete all projects of the database after a confirmation of the admin
+   */
   deleteAllProjects() {
     if(confirm("Are you sure you want to delete all project ?")){
       ProjectActions.remove_all();
-    }    
+    }
   }
 
-
+  /**
+   * Create the user if there is no error
+   */
   createUser() {
     if (this.passwordValidation() == 'error'){
       alert('Please correct the form')
@@ -53,30 +58,10 @@ class AdminComponent extends Component {
     }
   }
 
-  // nameValidation(){
-  //   var firstnameLength = 0;
-  //   var lastnameLength = 0;
-  //   if (this.state.user.firstname){
-  //     firstnameLength = this.state.user.firstname.length;
-  //   }
-  //   if (this.state.user.lastname){
-  //     lastnameLength = this.state.user.lastname.length;
-  //   }
-  //   if (firstnameLength < 3 || lastnameLength < 3) return 'error';
-  // }
-  //
-  // userValidation(){
-  //   var firstnameLength = 0;
-  //   var lastnameLength = 0;
-  //   if (this.state.user.firstname){
-  //     firstnameLength = this.state.user.firstname.length;
-  //   }
-  //   if (this.state.user.lastname){
-  //     lastnameLength = this.state.user.lastname.length;
-  //   }
-  //   if (firstnameLength < 3 || lastnameLength < 3) return 'error';
-  // }
-
+  /**
+   * Validation to check if the password matches the confirmed password
+   * @returns {*}
+   */
   passwordValidation(){
     if (this.state.user.password == this.state.confirmPassword) return 'success';
     else return 'error';

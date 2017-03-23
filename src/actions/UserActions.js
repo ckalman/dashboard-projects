@@ -4,7 +4,11 @@ import UserApi from '../api/UserApi';
 import config from 'config';
 
 export default {
-   all: () => {
+
+  /**
+   *
+   */
+  all: () => {
         UserApi.all(`${config.BASE_URL}/users`).then(users => {
             AppDispatcher.dispatch({
                 actionType: UserConstants.USER_ALL,
@@ -17,6 +21,11 @@ export default {
             });
         });
     },
+
+  /**
+   * 
+   * @param user
+   */
   create: (user) => {
     UserApi.create(`${config.BASE_URL}/user`, user).then(message => {
       AppDispatcher.dispatch({

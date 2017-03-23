@@ -3,6 +3,9 @@ import { Nav, Navbar, NavItem, Header, Brand, FormControl, Label, Button } from 
 import AuthActions from '../actions/AuthActions';
 import AuthStore from '../stores/AuthStore';
 
+/**
+ * Header component where there are the authentication and the routing menu
+ */
 class HeaderComponent extends Component {
 
   static contextTypes = {

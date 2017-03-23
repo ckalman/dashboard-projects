@@ -5,6 +5,11 @@ import config from 'config';
 
 export default {
 
+  /**
+   *
+   * @param username
+   * @param password
+   */
   authenticate: (username, password) => {
     AuthApi.auth(`${config.BASE_URL}/auth`, username, password).then(token => {
       AppDispatcher.dispatch({
@@ -18,6 +23,10 @@ export default {
       });
     });
   },
+
+  /**
+   *
+   */
   deauthenticate: () => {
     AppDispatcher.dispatch({
       actionType: AuthConstants.LOGOUT

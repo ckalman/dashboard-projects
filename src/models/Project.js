@@ -5,7 +5,7 @@ export { User };
 
 /**
  * Represents a project.
- * 
+ *
  * @export
  * @class Project
  */
@@ -35,12 +35,12 @@ export default class Project {
         }
     }
     /**
-     * Build all Project instancies from array.
-     * 
+     * Build all Project instances from array.
+     *
      * @static
      * @param {Array} usersData
      * @returns
-     * 
+     *
      * @memberOf Project
      */
     static constructAll(projectsData){
@@ -52,12 +52,12 @@ export default class Project {
     }
 
     /**
-     * 
+     *
      * Determinate if the given user is the owner of the project
-     * 
+     *
      * @param {any} user true if the user is the owner.
      * @returns
-     * 
+     *
      * @memberOf Project
      */
     isOwner(user) {

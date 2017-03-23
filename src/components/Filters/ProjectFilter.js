@@ -8,6 +8,9 @@ import renderDropDownList from '../bootstrap/DropDownList';
 import Status from '../../constants/StatusConstants';
 import { Panel, Col, Table, FormControl,Form,FormGroup,ControlLabel , Button } from 'react-bootstrap';
 
+/**
+ * Filter component to filter the projects list with its deadline, its tags or its status
+ */
 class ProjectFiltersComponent extends Component {
 
 
@@ -37,12 +40,19 @@ class ProjectFiltersComponent extends Component {
         });
     }
 
-    resetFilters() {
+  /**
+   * Reset the filters fields and the result
+   */
+  resetFilters() {
       this.setState({ search: { tag:'', status:'', start_at:'', end_at:''} }) ;
       ProjectActions.resetfilter();
     }
 
-    handleSubmit(e) {
+  /**
+   * Launch the research from the filter fields
+   * @param e
+   */
+  handleSubmit(e) {
         e.preventDefault();
         ProjectActions.filter(this.state.search);
     }
@@ -82,13 +92,13 @@ class ProjectFiltersComponent extends Component {
 
                         <FormGroup controlId="date">
                             <Col componentClass={ControlLabel} sm={2}>
-                                Date de début :
+                                Deadline after :
                             </Col>
                             <Col sm={2}>
                                 <FormControl type="date" value={this.state.search.start_at} onChange={(e) => { this.setState({ search: Object.assign({}, search, { start_at: e.target.value }) }) } } />
                             </Col>
                             <Col componentClass={ControlLabel} sm={2}>
-                                Date de fin :
+                                Deadline before :
                             </Col>
                             <Col sm={2}>
                                 <FormControl type="date" value={this.state.search.end_at} onChange={(e) => { this.setState({ search: Object.assign({}, search, { end_at: e.target.value }) }) } }/>

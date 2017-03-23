@@ -5,6 +5,9 @@ import Stats from '../../utils/StatsManager';
 import { Pie } from 'react-pathjs-chart';
 import { FormControl } from 'react-bootstrap';
 
+/**
+ * Statistics component to show pie charts of the projects data on the right of the list.
+ */
 class Statistics extends Component {
 
   constructor() {

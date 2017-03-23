@@ -4,6 +4,9 @@ import ProjectsTables from './Projects/ProjectsTables';
 import Statistics from './Projects/Statistics';
 import ProjectFilter from './Filters/ProjectFilter';
 
+/**
+ * Home page component to show the projects list, its filters and its stats
+ */
 class HomeComponent extends Component {
 
   constructor() {

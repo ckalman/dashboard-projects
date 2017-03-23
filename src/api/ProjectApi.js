@@ -3,7 +3,12 @@ import AuthStore from '../stores/AuthStore';
 
 export default {
 
-    all: (apiUrl) => {
+  /**
+   * Retrieve all projects
+    * @param apiUrl
+   * @returns {Promise}
+   */
+  all: (apiUrl) => {
         return new Promise((resolve, reject) => {
             request
                 .get(apiUrl)
@@ -22,6 +27,11 @@ export default {
         });
     },
 
+  /**
+   * Get a project from its id
+   * @param apiUrl
+   * @returns {Promise}
+   */
     first: (apiUrl) => {
         return new Promise((resolve, reject) => {
             request
@@ -41,6 +51,11 @@ export default {
         });
     },
 
+  /**
+   * Return the projects matching given criteria (GET)
+   * @param apiUrl
+   * @returns {Promise}
+   */
     search: (apiUrl) => {
         return new Promise((resolve, reject) => {
             request
@@ -60,6 +75,12 @@ export default {
         });
     },
 
+  /**
+   * Update the given project
+   * @param apiUrl
+   * @param project
+   * @returns {Promise}
+   */
     update: (apiUrl, project) => {
         return new Promise((resolve, reject) => {
             request
@@ -79,6 +100,13 @@ export default {
                 });
         });
     },
+
+  /**
+   * Delete a given project
+   * @param apiUrl
+   * @param id
+   * @returns {Promise}
+   */
     remove: (apiUrl, id) => {
         return new Promise((resolve, reject) => {
             request
@@ -97,7 +125,13 @@ export default {
                 });
         });
     },
-    remove_all: (apiUrl) => {
+
+  /**
+   *
+   * @param apiUrl
+   * @returns {Promise}
+   */
+  remove_all: (apiUrl) => {
         return new Promise((resolve, reject) => {
             request
                 .del(apiUrl)

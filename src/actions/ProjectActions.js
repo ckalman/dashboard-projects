@@ -4,6 +4,9 @@ import ProjectApi from '../api/ProjectApi';
 import config from 'config';
 
 export default {
+  /**
+   *
+   */
     all: () => {
         ProjectApi.all(`${config.BASE_URL}/projects`).then(projects => {
             AppDispatcher.dispatch({
@@ -17,6 +20,12 @@ export default {
             });
         });
     },
+
+  /**
+   *
+   * @param type
+   * @param value
+   */
     search: (type, value) => {
         ProjectApi.search(`${config.BASE_URL}/projects/filtered?filterType=${type}&value=${value}`).then(projects => {
             AppDispatcher.dispatch({
@@ -30,6 +39,11 @@ export default {
             });
         });
     },
+
+  /**
+   *
+   * @param id
+   */
     first: (id) => {
         ProjectApi.first(`${config.BASE_URL}/projects/${id}`).then(project => {
             AppDispatcher.dispatch({
@@ -43,6 +57,11 @@ export default {
             });
         });
     },
+
+  /**
+   *
+   * @param project
+   */
     update: (project) => {
         ProjectApi.update(`${config.BASE_URL}/projects`, project).then(project => {
             AppDispatcher.dispatch({
@@ -56,6 +75,11 @@ export default {
             });
         });
     },
+
+  /**
+   *
+   * @param id
+   */
     remove: (id) => {
         ProjectApi.remove(`${config.BASE_URL}/projects`, id).then(response => {
             AppDispatcher.dispatch({
@@ -69,7 +93,11 @@ export default {
             });
         });
     },
-    remove_all: () => {
+
+  /**
+   *
+   */
+  remove_all: () => {
         ProjectApi.remove_all(`${config.BASE_URL}/projects/all`).then(response => {
             AppDispatcher.dispatch({
                 actionType: ProjectConstants.PROJECT_REMOVE_ALL,
@@ -82,6 +110,11 @@ export default {
             });
         });
     },
+
+  /**
+   *
+   * @param project
+   */
     create: (project) => {
         ProjectApi.create(`${config.BASE_URL}/projects`, project).then(project => {
             AppDispatcher.dispatch({
@@ -95,13 +128,22 @@ export default {
             });
         });
     },
+
+  /**
+   *
+   * @param data
+   */
     filter: (data) => {
         AppDispatcher.dispatch({
                 actionType: ProjectConstants.PROJECT_FILTER,
                 filter: data
         });
     },
-    resetfilter: () => {
+
+  /**
+   *
+   */
+  resetfilter: () => {
         AppDispatcher.dispatch({
                 actionType: ProjectConstants.PROJECT_FILTER_RESET
         });

@@ -5,8 +5,8 @@ import FormProject from '../Projects/FormProject';
 
 
 /**
- * Display the form for create / update / delete project 
- * 
+ * Display the form to create, update or delete a project
+ *
  * @class ProjectComponent
  * @extends {Component}
  */
@@ -26,11 +26,11 @@ class ProjectComponent extends Component {
     }
     componentWillMount() {
         var id = this.props.params.id;
-        
-        ProjectStore.addChangeListener(this.onChange);     
+
+        ProjectStore.addChangeListener(this.onChange);
         ProjectActions.first(id);
-                
-        // Acivate create mode
+
+        // Activate the create mode
         if (!id) {
             this.setState({ create: true });
         }

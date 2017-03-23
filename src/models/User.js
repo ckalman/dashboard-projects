@@ -2,7 +2,7 @@ import roles from '../constants/RolesConstants';
 
 /**
  * Represents a user.
- * 
+ *
  * @export
  * @class User
  */
@@ -29,12 +29,12 @@ export default class User {
     }
 
     /**
-     * Build all User instancies from array.
-     * 
+     * Build all User instances from array.
+     *
      * @static
      * @param {Array} usersData
      * @returns
-     * 
+     *
      * @memberOf User
      */
     static constructAll(usersData) {
@@ -46,10 +46,10 @@ export default class User {
     }
 
     /**
-     * Determinate if the user is an administrator 
-     * 
+     * Determinate if the user is an administrator
+     *
      * @returns true if it is
-     * 
+     *
      * @memberOf User
      */
     isAdmin() {
@@ -57,10 +57,10 @@ export default class User {
     }
 
     /**
-     * 
+     *
      * @param {any} id project id
-     * @returns true if 
-     * 
+     * @returns true if
+     *
      * @memberOf User
      */
     isOwner(id) {
