@@ -30,6 +30,12 @@ body {
   display: inline-flex;
   width: 100%;
 }
+.no-project {
+  text-align: center;
+  margin: auto;
+  padding: 10px;
+  font-size: 35px;
+}
 .center{
   text-align: center;
 }

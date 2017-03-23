@@ -66,9 +66,40 @@ class ProjectsComponent extends Component {
     }
 
     render() {
+        const { projects } = this.state;
+
+        var projectsTable = (
+            <Table striped bordered condensed hover>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Project manager</th>
+                        <th>Deadline</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {this.state.projects.map(function (project, index) {
+                        return (
+                            <tr key={index} onClick={() => { window.location = "/project/" + project.id } }>
+                                <td>{project.title}</td>
+                                <td>{project.projectManager.firstname} {project.projectManager.lastname}</td>
+                                <td>{moment(project.deadline).format('DD-MM-YYYY')}</td>
+                                <td>{project.status}</td>
+                            </tr>
+                        );
+                    }.bind(this))}
+                </tbody>
+            </Table>
+        );
+
+        var noProject = (
+            <p className="no-project">No project to display</p>
+        )
+
         return (
             <div>
-                <Panel header="Projects">
+                <Panel header={`Projects - ${projects.length}`}>
                     <div className="projects-filters">
                         <span>Filters</span>
                         <FormControl type="text" placeholder="Search" onChange={this.handleFilterUserInputChange} />
@@ -82,30 +113,10 @@ class ProjectsComponent extends Component {
                         </Button>
                     </div>
 
-                    <Table striped bordered condensed hover>
-                        <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>Project manager</th>
-                                <th>Deadline</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {this.state.projects.map(function (project, index) {
-                                return (
-                                    <tr key={index} onClick={() => { window.location = "/project/" + project.id } }>
-                                        <td>{project.title}</td>
-                                        <td>{project.projectManager.firstname} {project.projectManager.lastname}</td>
-                                        <td>{moment(project.deadline).format('DD-MM-YYYY')}</td>
-                                        <td>{project.status}</td>
-                                    </tr>
-                                );
-                            }.bind(this))}
-                        </tbody>
-                    </Table>
+                    {projects.length > 0 ? projectsTable : noProject}
+
                     <Col sd={2} md={12} className="center">
-                        <Button onClick={() => {window.location = '/project/create'}} >
+                        <Button onClick={() => { window.location = '/project/create' } } >
                             Create new project
                         </Button>
                     </Col>

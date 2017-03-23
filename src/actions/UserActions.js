@@ -23,7 +23,7 @@ export default {
     },
 
   /**
-   * 
+   *
    * @param user
    */
   create: (user) => {
