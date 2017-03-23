@@ -149,6 +149,13 @@ export default {
                 });
         });
     },
+
+  /**
+   * Create a new project from a given model
+   * @param apiUrl
+   * @param project
+   * @returns {Promise}
+   */
     create: (apiUrl, project) => {
         return new Promise((resolve, reject) => {
             request

@@ -2,6 +2,12 @@ import request from 'superagent/lib/client';
 import AuthStore from '../stores/AuthStore';
 
 export default {
+
+  /**
+   * Return all users
+   * @param apiUrl
+   * @returns {Promise}
+   */
     all: (apiUrl) => {
         return new Promise((resolve, reject) => {
             request
@@ -20,6 +26,13 @@ export default {
                 });
         });
     },
+
+  /**
+   * Create a new user from a given model
+   * @param apiUrl
+   * @param user
+   * @returns {Promise}
+   */
     create: (apiUrl, user) => {
         return new Promise((resolve, reject) => {
             request

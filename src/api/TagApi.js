@@ -2,6 +2,11 @@ import request from 'superagent/lib/client';
 
 export default {
 
+  /**
+   * Retrieve all tags used by any project
+   * @param apiUrl
+   * @returns {Promise}
+   */
     all: (apiUrl) => {
         return new Promise((resolve, reject) => {
             request
