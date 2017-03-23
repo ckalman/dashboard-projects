@@ -1,6 +1,11 @@
 import Status from '../constants/StatusConstants';
 import Auth from '../stores/AuthStore';
 import moment from 'moment';
+
+/**
+ * Validate the data inserted by the user 
+ * for the Project model.
+ */
 export default class {
 
     state = {
@@ -23,6 +28,10 @@ export default class {
         this.project = project;
     }
 
+    /**
+     * Validate the input and return bootstrap status
+     * example getState('title');
+     */
     getState(inputName) {
         var value = this.project[inputName];
         var result = false;
@@ -75,6 +84,10 @@ export default class {
         return false;
     }
     
+    /**
+     * Determinate if all data are correct
+     * return true if all data are correct
+     */
     isValid(){
         var result = true;
         var temp = this.validity;

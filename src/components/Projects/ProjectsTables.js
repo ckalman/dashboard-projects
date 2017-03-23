@@ -4,6 +4,12 @@ import ProjectActions from '../../actions/ProjectActions';
 import moment from 'moment'
 import { Panel, Col, Table, FormControl, Button } from 'react-bootstrap';
 
+/**
+ * Display a list of project
+ * 
+ * @class ProjectsComponent
+ * @extends {Component}
+ */
 class ProjectsComponent extends Component {
 
     static contextTypes = {
@@ -45,6 +51,12 @@ class ProjectsComponent extends Component {
         this.setState({ filterType: e.target.value });
     }
 
+    /**
+     * Action when the user click on search
+     * 
+     * 
+     * @memberOf ProjectsComponent
+     */
     handleClickSearch() {
         if (this.state.filterType != '') {
             ProjectActions.search(this.state.filterType, this.state.search);

@@ -1,5 +1,5 @@
 /**
- * 
+ * Represent a checkbox object
  * 
  * @export
  * @class CheckBox

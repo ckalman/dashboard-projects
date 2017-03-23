@@ -4,6 +4,12 @@ import ProjectActions from '../../actions/ProjectActions';
 import FormProject from '../Projects/FormProject';
 
 
+/**
+ * Display the form for create / update / delete project 
+ * 
+ * @class ProjectComponent
+ * @extends {Component}
+ */
 class ProjectComponent extends Component {
 
     static contextTypes = {
@@ -24,6 +30,7 @@ class ProjectComponent extends Component {
         ProjectStore.addChangeListener(this.onChange);     
         ProjectActions.first(id);
                 
+        // Acivate create mode
         if (!id) {
             this.setState({ create: true });
         }

@@ -14,7 +14,13 @@ import CheckBoxModel from '../../models/Checkbox';
 import FormValidator from '../../validators/BootstrapProjectValidator';
 import { Panel, Col, Table, Form, FormControl, FormGroup, ControlLabel, Checkbox, Button } from 'react-bootstrap';
 
-
+/**
+ * Form Component for Read, Create or Edit a project
+ * 
+ * TODO: Refactor 
+ * @class FormProjectComponent
+ * @extends {Component}
+ */
 class FormProjectComponent extends Component {
 
     static contextTypes = {
@@ -27,9 +33,12 @@ class FormProjectComponent extends Component {
         super();
         this.state = {
             project: {},
+            // Array of string
             tags: [],
+            // Array of {CheckBoxModel}
             tagsCheckBox: [],
-            edit: false,
+            // Define form mode
+            edit: false, 
             create: false,
         }
         this.tagsLoaded = false;
@@ -39,8 +48,6 @@ class FormProjectComponent extends Component {
     }
 
     componentWillMount() {
-       
-
         ProjectStore.addChangeListener(this.onChange);
         TagStore.addChangeListener(this.onChange);
         UserStore.addChangeListener(this.onChange);
@@ -62,9 +69,12 @@ class FormProjectComponent extends Component {
         var edit = user.isAdmin();
         var project = ProjectStore.getProject();
         
+        // if the user is not admin
         if(!edit && project.projectManager){
+            // Check if the user is the project manager
            edit =  user.isOwner(project.projectManager.id);
         }
+        // Check if the form is in create model and the user is authenticated
         if(this.state.create && AuthStore.isAuthenticated()){
             edit = true;
         }
@@ -76,6 +86,7 @@ class FormProjectComponent extends Component {
             edit: !edit
         });
 
+        // Generate all checkboxs
         if (!this.tagsLoaded && TagStore.getTags().length > 0 && ProjectStore.getProject().tags) {
             this.tagsLoaded = true;
             this.setState({ tagsCheckBox: this.loadCheckbox(ProjectStore.getProject(), TagStore.getTags()) });
@@ -87,6 +98,15 @@ class FormProjectComponent extends Component {
         }
     }
 
+    /**
+     * When the user click on a checkbox
+     * they will set the checked value.
+     * 
+     * @param {any} index
+     * 
+     * @memberOf FormProjectComponent
+    
+     */
     handleCheckBoxChange(index) {
         var checkbox = this.state.tagsCheckBox[index];
         this.state.tagsCheckBox[index].checked = !checkbox.isChecked()
@@ -95,7 +115,18 @@ class FormProjectComponent extends Component {
         });
     }
 
-    // TODO: refactor
+    /**
+     * 
+     * Load currently selected tags from the project.
+     * Then merge with all tags.
+     * 
+     * TODO: refactor
+     * @param {any} project Project object with an array of tags
+     * @param {any} tags all tags list
+     * @returns {Array} of CheckBoxModel
+     * 
+     * @memberOf FormProjectComponent
+     */
     loadCheckbox(project, tags) {
         var temp = [];
         var all = _.union(project, tags);
@@ -116,6 +147,11 @@ class FormProjectComponent extends Component {
         return _.sortBy(temp, 'value');
     }
 
+    /**
+     * Add new tag from the user input. 
+     * 
+     * @memberOf FormProjectComponent
+     */
     addTag() {
         var tag = this.state.addTag;
         var tagCheckBox = new CheckBoxModel({
@@ -127,6 +163,14 @@ class FormProjectComponent extends Component {
         this.setState({ tagsCheckBox: _.uniqBy(this.state.tagsCheckBox, 'value') });
     }
 
+/**
+ * Render checkbox list
+ * 
+ * @param {any} checkboxes
+ * @returns
+ * 
+ * @memberOf FormProjectComponent
+ */
     renderCheckBoxes(checkboxes) {
         const { edit } = this.state
         return checkboxes.map((checkbox, index) =>
@@ -144,6 +188,14 @@ class FormProjectComponent extends Component {
         );
     }
 
+    /**
+     * Handle when the user submit the form (save action / update action)
+     * 
+     * @param {any} e
+     * @returns
+     * 
+     * @memberOf FormProjectComponent
+     */
     handleSubmit(e) {
         e.preventDefault();
         if(!FormProjectComponent.validator.isValid()){
@@ -166,7 +218,16 @@ class FormProjectComponent extends Component {
         ProjectActions.remove(this.state.project.id);
         window.location = '/';
     }
-
+    
+    /**
+     * 
+     * Extract an array of tags checked by the user
+     * 
+     * @param {any} checkbox
+     * @returns {Array} of String
+     * 
+     * @memberOf FormProjectComponent
+     */
     getTagsFromCheckBox(checkbox) {
         var temp = [];
         if(checkbox){
