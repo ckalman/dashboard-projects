@@ -2,6 +2,8 @@
 
 ## Running the Sample
 
+Please install nodejs and npm : https://nodejs.org/en/ before run commands.
+
 Install the dependencies.
 
 ```bash
